@@ -5,6 +5,15 @@ context Calculator {
     // creating folders
     constraint Name {
         check: self.name.length() > 1
-        message: "Calculator must have a name"
+        message: "Calculator must have a name."
+    }
+
+    // todo: symbols should be unique for each calculator project
+}
+
+context Expression {
+    constraint WellTyped {
+        check: self.isWellTyped()
+        message: "Expression is ill-typed: " + self.type().serialize()
     }
 }

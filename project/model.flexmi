@@ -12,14 +12,14 @@
         <booleanliteral value="false"></booleanliteral>
     </unaryexpression>
     <unaryexpression operator="NEGATION">
-        <booleanliteral value="false"></booleanliteral>
+        <symbolexpression symbol="y"></symbolexpression>
     </unaryexpression>
     <binaryexpression operator="LOGICAL_AND">
         <booleanliteral value="true"></booleanliteral>
         <booleanliteral value="true"></booleanliteral>
     </binaryexpression>
     <binaryexpression operator="EQUALITY">
-        <booleanliteral value="true"></booleanliteral>
+        <symbolexpression symbol="y"></symbolexpression>
         <realliteral value="1.23"></realliteral>
     </binaryexpression>
     <binaryexpression operator="EQUALITY">

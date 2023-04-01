@@ -43,6 +43,13 @@ operation Type equiv(other : Type): Boolean {
 	return typeEquiv(self, other);
 }
 
+operation Type isInvalid(): Boolean {
+    return false;
+}
+
+operation InvalidType isInvalid(): Boolean {
+    return true;
+}
 
 // EXPRESSIONS
 operation primitiveType(p : Any): Type {
@@ -98,7 +105,7 @@ operation invalidTy(cause : String): InvalidType {
 }
 
 operation InvalidType serialize(): String {
-    return "Invalid, " + self.cause;
+    return self.cause;
 }
 
 operation InvalidType isNumeric(): Boolean {
@@ -106,7 +113,11 @@ operation InvalidType isNumeric(): Boolean {
 }
 
 operation isInvalid(t : Type): Boolean {
-    return t.serialize().startsWith("Invalid");
+    return t.isInvalid();
+}
+
+operation Expression isWellTyped(): Boolean {
+    return (not isInvalid(self.type()));
 }
 
 operation SymbolExpression type(): Type {
@@ -149,6 +160,7 @@ operation BinaryExpression type(): Type {
             if (leftTy.equiv(rightTy) and (isNumeric(leftTy) or isTextTy(leftTy))) {
                 return leftTy;
             }
+            return invalidTy("both operands of an addition/catenation must be numerics/text");
         case BinaryOp#MULTIPLICATION:
             continue;
         case BinaryOp#SUBTRACTION:

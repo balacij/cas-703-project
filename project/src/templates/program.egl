@@ -1,10 +1,17 @@
 [%import "../program.eol";%]
+package [%=c.name /*TODO: make the names automatically suitable for package names*/%];
+
+public class Main {
+    public static void main(String[] args) {
+
+    }
+}
+
 <h2>[%=c.name%]'s Symbol Types</h2>
 
 [%for (s in c.symbols) {%]
     [%=s.name%] : [%=s.type.serialize()%]
 [%}%]
-
 
 <h2>[%=c.name%]'s Expression Types</h2>
 
