@@ -3,6 +3,17 @@ package calculator;
 
 class Calculator {
     attr String[1] name;
+
+	// TODO: Each calculator should have a (i) list of symbol declarations
+	// (which may or may not be 'constant'/'final'), (ii) list of input symbols,
+	// (iii) list of output symbols, and (iv) list of statements that somehow
+	// affect each output symbol and use each input symbol.
+
+	// TODO: As of right now, the "name" of the calculator is the only "good"
+	// part of this calculator metamodel. The symbols and expressions are here
+	// for purely testing purposes. They should later be used by other
+	// components instead.
+
     val Symbol[*] symbols;
     val Expression[*] exprs;
 }
