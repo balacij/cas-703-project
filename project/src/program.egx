@@ -1,0 +1,8 @@
+pre {
+    var artifactsDir = "../build/";
+}
+
+rule READMEs transform c : Calculator {
+    template: "readme.egl"
+    target: artifactsDir + c.name + "/README.md"
+}

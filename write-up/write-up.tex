@@ -1,0 +1,73 @@
+\documentclass[11pt,fleqn]{article}
+
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{url}
+
+% Allow more line breaks in URLs
+\usepackage{xurl}
+
+% Enable links within the document
+\usepackage{hyperref}
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{0.4\baselineskip}{\baselineskip}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=red,
+  urlcolor=red,
+  breaklinks=true,
+}
+\urlstyle{rm} % Make URL styled fonts match hyperref's hrefs
+
+\setlength {\topmargin} {-0.15in}
+\setlength{\textwidth}{6.5in}
+\setlength{\hoffset}{-0.8in}
+\setlength {\textheight} {8.6in}
+\setlength {\footskip} {0.9in}
+
+
+% Credit to Gabriel Devenyi for this bibliography cfg:
+% github.com/gdevenyi/mcmaster.latex
+\usepackage[
+  style=numeric-comp,
+  backend=biber,
+  sorting=none,
+  backref=true,
+  maxnames=99,
+  alldates=iso,
+  seconds=true
+]{biblatex} % bibliography
+\addbibresource{references.bib}
+
+\title{\vspace{-3.5cm}CAS 703 Software Project: Calculators}
+\author{Hassan \and Jason}
+
+\date{
+	McMaster University \\ \texttt{\{, balacij\}@mcmaster.ca}\\%
+	\today
+}
+
+\usepackage{multicol}
+\usepackage{todonotes}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+%------------------------------------------------------------------------------
+% Introduction
+%------------------------------------------------------------------------------
+\section{Introduction}
+
+% %------------------------------------------------------------------------------
+% % Bibliography
+% %------------------------------------------------------------------------------
+% \printbibliography[heading=bibintoc]
+
+\end{document}

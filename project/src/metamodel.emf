@@ -1,0 +1,6 @@
+@namespace(uri="calculator", prefix="")
+package calculator;
+
+class Calculator {
+    attr String[1] name = ""; // default name is empty string
+}
