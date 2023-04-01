@@ -1,4 +1,3 @@
-
 // TYPES
 
 @cached
@@ -58,6 +57,7 @@ operation primitiveType(p : Any): Type {
 	return t;
 }
 
+@cached
 operation TextLiteral type(): Type {
 	// return primitiveType(Primitive#TEXT);
 	var t = new PrimitiveType();
@@ -65,14 +65,17 @@ operation TextLiteral type(): Type {
 	return t;
 }
 
+@cached
 operation RealLiteral type(): Type {
 	return primitiveType(Primitive#REAL);
 }
 
+@cached
 operation IntegerLiteral type(): Type {
 	return primitiveType(Primitive#INTEGER);
 }
 
+@cached
 operation BooleanLiteral type(): Type {
 	return primitiveType(Primitive#BOOLEAN);
 }
@@ -124,6 +127,7 @@ operation SymbolExpression type(): Type {
     return self.symbol.type;
 }
 
+@cached
 operation UnaryExpression type(): Type {
     var bodyTy = self.body.type();
     if (isInvalid(bodyTy)) {
@@ -144,6 +148,7 @@ operation UnaryExpression type(): Type {
     }
 }
 
+@cached
 operation BinaryExpression type(): Type {
     var leftTy = self.exprs[0].type();
     if (isInvalid(leftTy)) {
