@@ -1,0 +1,13 @@
+[%import "../program.eol";%]
+<h2>[%=c.name%]'s Symbol Types</h2>
+
+[%for (s in c.symbols) {%]
+    [%=s.name%] : [%=s.type.serialize()%]
+[%}%]
+
+
+<h2>[%=c.name%]'s Expression Types</h2>
+
+[%for (e in c.exprs) {%]
+    [%=e.type().serialize()%]
+[%}%]

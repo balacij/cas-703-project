@@ -3,6 +3,11 @@ pre {
 }
 
 rule READMEs transform c : Calculator {
-    template: "readme.egl"
+    template: "templates/readme.egl"
     target: artifactsDir + c.name + "/README.md"
+}
+
+rule Programs transform c : Calculator {
+    template: "templates/program.egl"
+    target: artifactsDir + c.name + "/Main.java"
 }

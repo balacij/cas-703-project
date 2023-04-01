@@ -1,0 +1,176 @@
+
+// TYPES
+
+@cached
+operation PrimitiveType serialize(): String {
+	switch (self.primitive) {
+		case Primitive#TEXT:
+			return "Text";
+		case Primitive#REAL:
+			return "Real";
+		case Primitive#INTEGER:
+			return "Integer";
+		case Primitive#BOOLEAN:
+			return "Boolean";
+	}
+}
+
+@cached
+operation VectorType serialize(): String {
+	return "Vector(" + self.valueType.serialize() + "," + self.length.asString() + ")";
+}
+
+operation PrimitiveType isNumeric(): Boolean {
+	switch (self.primitive) {
+		case Primitive#REAL:
+			return true;
+		case Primitive#INTEGER:
+			return true;
+		default:
+			return false;
+	}
+}
+
+operation VectorType isNumeric(): Boolean {
+	return false;
+}
+
+operation typeEquiv(left : Type, right : Type): Boolean {
+	return left.serialize() == right.serialize();
+}
+
+operation Type equiv(other : Type): Boolean {
+	return typeEquiv(self, other);
+}
+
+
+// EXPRESSIONS
+operation primitiveType(p : Any): Type {
+	var t = new PrimitiveType();
+	t.primitive = p;
+	return t;
+}
+
+operation TextLiteral type(): Type {
+	// return primitiveType(Primitive#TEXT);
+	var t = new PrimitiveType();
+	t.primitive = Primitive#TEXT;
+	return t;
+}
+
+operation RealLiteral type(): Type {
+	return primitiveType(Primitive#REAL);
+}
+
+operation IntegerLiteral type(): Type {
+	return primitiveType(Primitive#INTEGER);
+}
+
+operation BooleanLiteral type(): Type {
+	return primitiveType(Primitive#BOOLEAN);
+}
+
+operation isBoolTy(t : Type): Boolean {
+    var boolTy = primitiveType(Primitive#BOOLEAN);
+    return boolTy.equiv(t);
+}
+
+operation isTextTy(t : Type): Boolean {
+    var textTy = primitiveType(Primitive#TEXT);
+    return textTy.equiv(t);
+}
+
+operation isNumericTy(t : Type): Boolean {
+    var realTy = primitiveType(Primitive#REAL);
+    var intTy = primitiveType(Primitive#INTEGER);
+    if (realTy.equiv(t)) {
+        return true;
+    } else if (intTy.equiv(t)) {
+        return true;
+    }
+    return false;
+}
+
+operation invalidTy(cause : String): InvalidType {
+    var invTy = new InvalidType();
+    invTy.cause = cause;
+    return invTy;
+}
+
+operation InvalidType serialize(): String {
+    return "Invalid, " + self.cause;
+}
+
+operation InvalidType isNumeric(): Boolean {
+    return false;
+}
+
+operation isInvalid(t : Type): Boolean {
+    return t.serialize().startsWith("Invalid");
+}
+
+operation SymbolExpression type(): Type {
+    return self.symbol.type;
+}
+
+operation UnaryExpression type(): Type {
+    var bodyTy = self.body.type();
+    if (isInvalid(bodyTy)) {
+        return bodyTy;
+    }
+    
+    switch (self.operator) {
+        case UnaryOp#LOGICAL_NOT:
+            if (isBoolTy(bodyTy)) {
+                return bodyTy;
+            } 
+            return invalidTy("logical negation expects boolean operand");
+        case UnaryOp#NEGATION:
+            if (isNumericTy(bodyTy)) {
+                return bodyTy;
+            }
+            return invalidTy("negation expects numeric operand");
+    }
+}
+
+operation BinaryExpression type(): Type {
+    var leftTy = self.exprs[0].type();
+    if (isInvalid(leftTy)) {
+        return leftTy;
+    }
+    
+    var rightTy = self.exprs[1].type();
+    if (isInvalid(rightTy)) {
+        return rightTy;
+    }
+    
+    switch (self.operator) {
+        case BinaryOp#ADDITION:
+            if (leftTy.equiv(rightTy) and (isNumeric(leftTy) or isTextTy(leftTy))) {
+                return leftTy;
+            }
+        case BinaryOp#MULTIPLICATION:
+            continue;
+        case BinaryOp#SUBTRACTION:
+            continue;
+        case BinaryOp#POWER:
+            if (leftTy.equiv(rightTy) and isNumeric(leftTy)) {
+                return leftTy;
+            }
+            return invalidTy("both operands of mul/sub/pow expected to be the same numeric type");
+        case BinaryOp#LOGICAL_AND:
+            continue;
+        case BinaryOp#LOGICAL_OR:
+            continue;
+        case BinaryOp#LOGICAL_IMPLIES:
+            if (isBoolTy(leftTy) and isBoolTy(rightTy)) {
+                return leftTy;
+            }
+            return invalidTy("both operands of and/or/implies are expected to be boolean-typed");      
+        case BinaryOp#EQUALITY:
+            if (leftTy.equiv(rightTy)) {
+                return primitiveType(Primitive#BOOLEAN);
+            }
+            return invalidTy("both operands of equality expected to be of the same type");
+    }
+}

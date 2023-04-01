@@ -34,9 +34,12 @@ task run {
     // Load the model.flexmi EMF model
     ant.'epsilon.emf.loadModel'(name: 'M', modelfile: 'model.flexmi', metamodelfile: 'src/metamodel.emf')
 
-    // Run program.evl against it
+    // Run program.eol against it (attaching functionality as methods)
+    ant.'epsilon.eol'(src: 'src/program.eol'){ model(ref: 'M') }
+
+    // Run program.evl against it (asserting data constraints and critiques)
     ant.'epsilon.evl'(src: 'src/program.evl'){ model(ref: 'M') }
 
-    // Run program.egx against it
+    // Run program.egx against it (transforming the validated model into artifacts)
     ant.'epsilon.egl'(src: 'src/program.egx'){ model(ref: 'M') }
 }

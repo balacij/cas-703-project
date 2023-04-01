@@ -1,6 +1,96 @@
-@namespace(uri="calculator", prefix="")
+@namespace(uri="calculator", prefix="c")
 package calculator;
 
 class Calculator {
-    attr String[1] name = ""; // default name is empty string
+    attr String[1] name;
+    val Symbol[*] symbols;
+    val Expression[*] exprs;
+}
+
+// TYPES
+enum Primitive {
+	TEXT;
+	REAL;
+	INTEGER;
+	BOOLEAN;
+}
+
+abstract class Type {
+	op String[1] serialize();
+	op boolean[1] isNumeric();
+}
+
+class PrimitiveType extends Type {
+	attr Primitive[1] primitive;
+}
+
+class VectorType extends Type {
+	attr int[1] length;
+	val Type[1] valueType;
+}
+
+class InvalidType extends Type {
+    attr String[1] cause;
+}
+
+// EXPRESSIONS
+abstract class Expression {
+	op Type[1] type();
+	op String[1] asJava();
+}
+
+class TextLiteral extends Expression {
+	attr String[1] value;
+}
+
+class RealLiteral extends Expression {
+	attr double[1] value;
+}
+
+class IntegerLiteral extends Expression {
+	attr int[1] value;
+}
+
+class BooleanLiteral extends Expression {
+	attr boolean[1] value;
+}
+
+class Symbol {
+    id attr String[1] name;
+    val Type[1] type;
+}
+
+class SymbolExpression extends Expression {
+    ref Symbol[1] symbol;
+}
+
+enum UnaryOp {
+	LOGICAL_NOT;
+	NEGATION;
+}
+
+class UnaryExpression extends Expression {
+	attr UnaryOp[1] operator;
+	val Expression[1] body;
+}
+
+enum BinaryOp {
+	// numbers (of same type)
+	ADDITION; // also allowed for text and vectors
+	MULTIPLICATION;
+	SUBTRACTION;
+	POWER;
+	
+	// booleans
+	LOGICAL_AND;
+	LOGICAL_OR;
+	LOGICAL_IMPLIES;
+	
+	// any
+	EQUALITY;
+}
+
+class BinaryExpression extends Expression {
+	attr BinaryOp[1] operator;
+	val Expression[2] exprs;
 }

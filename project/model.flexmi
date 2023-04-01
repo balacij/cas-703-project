@@ -1,2 +1,33 @@
 <?nsuri calculator?>
-<calculator name="something"></calculator>
+<calculator name="Example Calculator">
+    <symbol name="x">
+        <primitivetype primitive="TEXT"></primitivetype>
+    </symbol>
+    <symbol name="y">
+        <primitivetype primitive="REAL"></primitivetype>
+    </symbol>
+    <textliteral value="potato"></textliteral>
+    <realliteral value="1"></realliteral>
+    <unaryexpression operator="LOGICAL_NOT">
+        <booleanliteral value="false"></booleanliteral>
+    </unaryexpression>
+    <unaryexpression operator="NEGATION">
+        <booleanliteral value="false"></booleanliteral>
+    </unaryexpression>
+    <binaryexpression operator="LOGICAL_AND">
+        <booleanliteral value="true"></booleanliteral>
+        <booleanliteral value="true"></booleanliteral>
+    </binaryexpression>
+    <binaryexpression operator="EQUALITY">
+        <booleanliteral value="true"></booleanliteral>
+        <realliteral value="1.23"></realliteral>
+    </binaryexpression>
+    <binaryexpression operator="EQUALITY">
+        <realliteral value="1.23"></realliteral>
+        <realliteral value="1.23"></realliteral>
+    </binaryexpression>
+    <symbolexpression symbol="x"></symbolexpression>
+    <unaryoperation operator="NEGATION">
+        <symbolexpression symbol="y"></symbolexpression>
+    </unaryoperation>
+</calculator>
