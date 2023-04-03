@@ -18,5 +18,5 @@ There are no output symbols.
 ## Calculation Steps
 
 * y = (x + 1.23)
-* y = (x × (x + 1.23))
 * debug: show y
+* y = (x × (x + 1.23))
