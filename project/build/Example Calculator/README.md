@@ -10,7 +10,6 @@ Calculating things, an example :)
 ### Intermediates
 
 * y : Real
-* z : Real
 
 ### Outputs
 
