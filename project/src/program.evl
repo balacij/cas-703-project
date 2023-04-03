@@ -4,6 +4,11 @@ operation String withCalculator(c : Calculator): String {
     return c.name + ": " + self;
 }
 
+operation allUnique(c : Collection): Boolean {
+    var asSet = c.asSet();
+    return c.size() == asSet.size();
+}
+
 context Calculator {
     constraint NameLength {
         check: self.name.length() >= 1
@@ -13,6 +18,11 @@ context Calculator {
     critique Description {
         check: self.description.length() >= 1
         message: "It would be nice if you defined a human-readable description of your calculator.".withCalculator(self)
+    }
+
+    constraint UniqueSymbols {
+        check: allUnique(self.symbols().name)
+        message: "All symbols should have unique names.".withCalculator(self)
     }
 }
 
