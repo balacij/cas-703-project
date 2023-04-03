@@ -1,33 +1,29 @@
 <?nsuri calculator?>
-<calculator name="Example Calculator" description="Calculating things :)">
-    <symbol name="x">
-        <primitivetype primitive="TEXT"></primitivetype>
-    </symbol>
-    <symbol name="y">
-        <primitivetype primitive="REAL"></primitivetype>
-    </symbol>
-    <textliteral value="potato"></textliteral>
-    <realliteral value="1"></realliteral>
-    <unaryexpression operator="LOGICAL_NOT">
-        <booleanliteral value="false"></booleanliteral>
-    </unaryexpression>
-    <unaryexpression operator="NEGATION">
-        <symbolexpression symbol="y"></symbolexpression>
-    </unaryexpression>
-    <binaryexpression operator="LOGICAL_AND">
-        <booleanliteral value="true"></booleanliteral>
-        <booleanliteral value="true"></booleanliteral>
-    </binaryexpression>
-    <binaryexpression operator="EQUALITY">
-        <symbolexpression symbol="y"></symbolexpression>
-        <realliteral value="1.23"></realliteral>
-    </binaryexpression>
-    <binaryexpression operator="EQUALITY">
-        <realliteral value="1.23"></realliteral>
-        <realliteral value="1.23"></realliteral>
-    </binaryexpression>
-    <symbolexpression symbol="x"></symbolexpression>
-    <unaryoperation operator="NEGATION">
-        <symbolexpression symbol="y"></symbolexpression>
-    </unaryoperation>
+<calculator name="Example Calculator" description="Calculating things, an example :)">
+    <symboldeclaration kind="INPUT">
+        <symbol name="x">
+            <primitivetype primitive="REAL"></primitivetype>
+        </symbol>
+    </symboldeclaration>
+    <symboldeclaration kind="INTERMEDIATE">
+        <symbol name="y">
+            <primitivetype primitive="REAL"></primitivetype>
+        </symbol>
+    </symboldeclaration>
+    <assignmentstep symbol="y">
+        <binaryexpression operation="ADDITION">
+            <symbolexpression symbol="x"></symbolexpression>
+            <realliteral value="1.23"></realliteral>
+        </binaryexpression>
+    </assignmentstep>
+    <printstep symbol="y"></printstep>
+    <assignmentstep symbol="y">
+        <binaryexpression operation="MULTIPLICATION">
+            <symbolexpression symbol="x"></symbolexpression>
+            <binaryexpression operation="ADDITION">
+                <symbolexpression symbol="x"></symbolexpression>
+                <realliteral value="1.23"></realliteral>
+            </binaryexpression>
+        </binaryexpression>
+    </assignmentstep>
 </calculator>

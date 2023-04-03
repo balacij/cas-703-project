@@ -4,10 +4,10 @@ package calculator;
 /* PROSPECTIVE CALCULATOR CODE EXAMPLE
 
 calculator potato with
-	constants
-		x = 4 : Real m
-		y = 10 : Real kg
-	variables
+	symbols
+		constants
+			x = 4 : Real m
+			y = 10 : Real kg
 		inputs
 			n : Integer ~ Number of items
 			a : Vector (Real m) n ~ Items
@@ -48,22 +48,40 @@ QUESTIONS:
 
 */
 
-class Calculator {
+class Described {
+	attr String[1] description = "";
+}
+
+class Calculator extends Described {
     attr String[1] name;
-	attr String[1] description;
+	val SymbolDeclaration[*] symbolDeclarations;
+	val CalculationStep[*] steps;
+}
 
-	// TODO: Each calculator should have a (i) list of symbol declarations
-	// (which may or may not be 'constant'/'final'), (ii) list of input symbols,
-	// (iii) list of output symbols, and (iv) list of statements that somehow
-	// affect each output symbol and use each input symbol.
+enum SymbolDeclarationKind {
+	INPUT;
+	INTERMEDIATE;
+	OUTPUT;
+}
 
-	// TODO: As of right now, the "name" of the calculator is the only "good"
-	// part of this calculator metamodel. The symbols and expressions are here
-	// for purely testing purposes. They should later be used by other
-	// components instead.
+class SymbolDeclaration extends Described {
+	attr SymbolDeclarationKind[1] kind;
+	val Symbol[1] symbol;
+}
 
-    val Symbol[*] symbols;
-    val Expression[*] exprs;
+abstract class CalculationStep {
+	op String[1] toJava();
+	op String[1] toHRN();
+}
+
+class AssignmentStep extends CalculationStep {
+	ref Symbol[1] assignee; // LHS
+	val Expression[1] body; // RHS
+}
+
+class PrintStep extends CalculationStep {
+	attr String[+] preface;
+	ref Symbol[1] symbol;
 }
 
 // TYPES
@@ -95,7 +113,7 @@ class InvalidType extends Type {
 // EXPRESSIONS
 abstract class Expression {
 	op Type[1] type();
-	op String[1] asJava();
+	op String[1] toHRN();
 }
 
 class TextLiteral extends Expression {
