@@ -115,6 +115,7 @@ enum BinaryOp {
 	// numbers (of same type)
 	ADDITION; // also allowed for text and vectors
 	MULTIPLICATION;
+	DIVISION;
 	SUBTRACTION;
 	POWER;
 	

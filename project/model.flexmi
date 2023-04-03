@@ -31,7 +31,4 @@
             </binaryexpression>
         </binaryexpression>
     </assignmentstep>
-    <assignmentstep symbol="z">
-        <booleanliteral value="false"></booleanliteral>
-    </assignmentstep>
 </calculator>
