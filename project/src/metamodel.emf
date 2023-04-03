@@ -1,56 +1,13 @@
 @namespace(uri="calculator", prefix="c")
 package calculator;
 
-/* PROSPECTIVE CALCULATOR CODE EXAMPLE
-
-calculator potato with
-	symbols
-		constants
-			x = 4 : Real m
-			y = 10 : Real kg
-		inputs
-			n : Integer ~ Number of items
-			a : Vector (Real m) n ~ Items
-		intermediates
-			b : Real m ~ Sum of items
-		outputs
-			c : Real m ~ Sum of items, doubled
-	steps
-		b = sum(a)
-		c = 2 * a
-
-
-COMMENTARY:
-	1. constants are declared with values, translate to `public static final` 
-		constants in Java
-	2. inputs are declared with type signature and input message for users
-	3. "Vector (Real m) n" is a complex type that we will need to be careful 
-		with handling
-	4. intermediate symbols are purely meant for internal calculations, with a 
-		message for debugging
-	5. outputs are declared with type signature and input message for users
-	6. variable (inputs, outputs, intermediates) should all be of the same 
-		metamodel but with a different enum 'kind'
-	7. steps should be analyzed to make sure all outputs are somehow assigned a 
-		value and that each step depends on expressions that were previously 
-		assigned something
-
-QUESTIONS:
-	1. It looks like it will be very difficult to build a textual editor for 
-		this. Should we just go for building a visual editor with Eugenia?
-		Writing expressions in Eugenia might be odd however.
-	
-	2. Should we just export a calculator program in Java? Or should we perform
-		the calculation ourselves? Personally, I tend towards the first because
-		it sounds simpler, but it might be more appropriate to do the second. We
-		could also do a hybrid of the two -- generate a Java program and run it
-		from our own code automatically.
-
-*/
+// DESCRIBED DATA TYPES
 
 abstract class Described {
 	attr String[1] description = "";
 }
+
+// CALCULATOR
 
 class Calculator extends Described {
     attr String[1] name;
@@ -64,13 +21,16 @@ enum SymbolDeclarationKind {
 	OUTPUT;
 }
 
+// SYMBOL DECLARATIONS
+
 class SymbolDeclaration extends Described {
 	attr SymbolDeclarationKind[1] kind;
 	val Symbol[1] symbol;
 }
 
+// CALCULATION STEPS
+
 abstract class CalculationStep extends Described {
-	op String[1] toJava();
 	op String[1] toHRN();
 }
 
