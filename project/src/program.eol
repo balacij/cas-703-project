@@ -1,5 +1,13 @@
 // TYPES
 
+operation AssignmentStep toHRN(): String {
+    return self.assignee.name + " = " + self.body.toHRN();
+}
+
+operation PrintStep toHRN(): String {
+    return "debug: show " + self.symbol.name;
+}
+
 @cached
 operation PrimitiveType serialize(): String {
 	switch (self.primitive) {
@@ -162,7 +170,7 @@ operation BinaryExpression type(): Type {
     
     switch (self.operator) {
         case BinaryOp#ADDITION:
-            if (leftTy.equiv(rightTy) and (isNumeric(leftTy) or isTextTy(leftTy))) {
+            if (leftTy.equiv(rightTy) and (isNumericTy(leftTy) or isTextTy(leftTy))) {
                 return leftTy;
             }
             return invalidTy("both operands of an addition/catenation must be numerics/text");
@@ -171,7 +179,7 @@ operation BinaryExpression type(): Type {
         case BinaryOp#SUBTRACTION:
             continue;
         case BinaryOp#POWER:
-            if (leftTy.equiv(rightTy) and isNumeric(leftTy)) {
+            if (leftTy.equiv(rightTy) and isNumericTy(leftTy)) {
                 return leftTy;
             }
             return invalidTy("both operands of mul/sub/pow expected to be the same numeric type");
@@ -190,4 +198,65 @@ operation BinaryExpression type(): Type {
             }
             return invalidTy("both operands of equality expected to be of the same type");
     }
+}
+
+operation TextLiteral toHRN(): String {
+    return self.value;
+}
+
+operation IntegerLiteral toHRN(): String {
+    return self.value.asString();
+}
+
+operation RealLiteral toHRN(): String {
+    return self.value.asString();
+}
+
+operation BooleanLiteral toHRN(): String {
+    return self.value.asString().toUpperCase();
+}
+
+operation SymbolExpression toHRN(): String {
+    return self.symbol.name;
+}
+
+@cached
+operation UnaryExpression toHRN(): String {
+    var op = "";
+    switch (self.operator) {
+        case UnaryOp#LOGICAL_NOT:
+            op = "¬";
+        case UnaryOp#NEGATION:
+            op = "-";
+    }
+    return op + " (" + self.body.toHRN() + ")";
+}
+
+
+@cached
+operation BinaryExpression toHRN(): String {
+    var left = self.exprs[0].toHRN();
+    var right = self.exprs[1].toHRN();
+    var op = "";
+
+    switch (self.operator) {
+        case BinaryOp#ADDITION:
+            op = "+";
+        case BinaryOp#MULTIPLICATION:
+            op = "×";
+        case BinaryOp#SUBTRACTION:
+            op = "-";
+        case BinaryOp#POWER:
+            op = "^";
+        case BinaryOp#LOGICAL_AND:
+            op = "∧";
+        case BinaryOp#LOGICAL_OR:
+            op = "∨";
+        case BinaryOp#LOGICAL_IMPLIES:
+            op = "⇒";
+        case BinaryOp#EQUALITY:
+            op = "==";
+    }
+
+    return "(" + left + " " + op + " " + right + ")";
 }

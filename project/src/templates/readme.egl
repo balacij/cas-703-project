@@ -1,3 +1,46 @@
 [%import "../program.eol";%]
 # [%=c.name%]
 [%=c.description%]
+
+## Symbols
+[%var symbols = c.symbolDeclarations;%]
+
+### Inputs
+[%var inputs = symbols.select(d|d.kind=SymbolDeclarationKind#INPUT).symbol;%]
+
+[%for (s in inputs) {%]
+* [%=s.name%] : [%=s.type.serialize()%]
+[%}%]
+[%if (inputs.size() == 0) {%]
+There are no input symbols.
+[%}%]
+
+### Intermediates
+[%var intermediates = symbols.select(d|d.kind=SymbolDeclarationKind#INTERMEDIATE).symbol;%]
+
+[%for (s in intermediates) {%]
+* [%=s.name%] : [%=s.type.serialize()%]
+[%}%]
+[%if (intermediates.size() == 0) {%]
+There are no intermediate symbols.
+[%}%]
+
+### Outputs
+[%var outputs = symbols.select(d|d.kind=SymbolDeclarationKind#OUTPUT).symbol;%]
+
+[%for (s in outputs) {%]
+* [%=s.name%] : [%=s.type.serialize()%]
+[%}%]
+[%if (outputs.size() == 0) {%]
+There are no output symbols.
+[%}%]
+
+## Calculation Steps
+[%var steps = c.steps;%]
+
+[%for (step in steps) {%]
+* [%=step.toHRN()%]
+[%}%]
+[%if (steps.size() == 0) {%]
+There are no calculation steps;
+[%}%]
