@@ -1,5 +1,5 @@
 <?nsuri calculator?>
-<calculator name="Example Calculator">
+<calculator name="Example Calculator" description="Calculating things :)">
     <symbol name="x">
         <primitivetype primitive="TEXT"></primitivetype>
     </symbol>

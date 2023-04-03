@@ -50,6 +50,7 @@ QUESTIONS:
 
 class Calculator {
     attr String[1] name;
+	attr String[1] description;
 
 	// TODO: Each calculator should have a (i) list of symbol declarations
 	// (which may or may not be 'constant'/'final'), (ii) list of input symbols,
