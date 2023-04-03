@@ -66,8 +66,20 @@ operation TextLiteral type(): Type {
 }
 
 @cached
+operation TextLiteral valueObj(): PrimitiveType {
+//	PrimitiveType x = new String(self.value);
+	return self.value;
+}
+
+@cached
 operation RealLiteral type(): Type {
 	return primitiveType(Primitive#REAL);
+}
+
+@cached
+operation RealLiteral valueObj(): PrimitiveType {
+//	PrimitiveType x = new Real(self.value);
+	return self.value;
 }
 
 @cached
@@ -76,8 +88,20 @@ operation IntegerLiteral type(): Type {
 }
 
 @cached
+operation IntegerLiteral valueObj(): PrimitiveType {
+//	PrimitiveType x = new Integer(self.value);
+	return self.value;
+}
+
+@cached
 operation BooleanLiteral type(): Type {
 	return primitiveType(Primitive#BOOLEAN);
+}
+
+@cached
+operation BooleanLiteral valueObj(): PrimitiveType {
+//	PrimitiveType x = new Boolean(self.value);
+	return self.value;
 }
 
 operation isBoolTy(t : Type): Boolean {

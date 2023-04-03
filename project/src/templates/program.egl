@@ -17,4 +17,5 @@ public class Main {
 
 [%for (e in c.exprs) {%]
     [%=e.type().serialize()%]
+    [%=e.valueObj()%]
 [%}%]

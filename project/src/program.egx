@@ -9,5 +9,5 @@ rule READMEs transform c : Calculator {
 
 rule Programs transform c : Calculator {
     template: "templates/program.egl"
-    target: artifactsDir + c.name + "/Main.java"
+    target: artifactsDir + c.name + "/Main.txt"
 }

@@ -95,6 +95,7 @@ class InvalidType extends Type {
 abstract class Expression {
 	op Type[1] type();
 	op String[1] asJava();
+	op PrimitiveType valueObj();
 }
 
 class TextLiteral extends Expression {
