@@ -5,6 +5,12 @@ operation Calculator declarations(): Collection {
     return self.symbolDeclarations;
 }
 
+@cached
+operation Calculator symbols(): Collection {
+    return self.symbolDeclarations.symbol;
+}
+
+@cached
 operation Calculator symbolsOfKind(k : Any): Collection {
     return self.declarations().select(d|d.kind=k).symbol;
 }

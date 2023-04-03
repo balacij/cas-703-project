@@ -1,9 +1,38 @@
 import "program.eol";
 
+operation String withCalculator(c : Calculator): String {
+    return c.name + ": " + self;
+}
+
+operation allUnique(c : Collection): Boolean {
+    var asSet = c.asSet();
+    return c.size() == asSet.size();
+}
+
 context Calculator {
-    constraint Name {
-        check: self.name.length() > 1
+    constraint NameLength {
+        check: self.name.length() >= 1
         message: "Calculator must have a name."
+    }
+
+    critique Description {
+        check: self.description.length() >= 1
+        message: "It would be nice if you defined a human-readable description of your calculator.".withCalculator(self)
+    }
+
+    constraint UniqueSymbols {
+        check: allUnique(self.symbols().name)
+        message: "All symbols should have unique names.".withCalculator(self)
+    }
+
+    constraint AtLeast1Input {
+        check: self.inputs().size() > 0
+        message: "Each calculator should have at least 1 input.".withCalculator(self)
+    }
+
+    constraint AtLeast1Output {
+        check: self.outputs().size() > 0
+        message: "Each calculator should have at least 1 output.".withCalculator(self)
     }
 }
 
