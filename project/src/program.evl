@@ -24,6 +24,16 @@ context Calculator {
         check: allUnique(self.symbols().name)
         message: "All symbols should have unique names.".withCalculator(self)
     }
+
+    constraint AtLeast1Input {
+        check: self.inputs().size() > 0
+        message: "Each calculator should have at least 1 input.".withCalculator(self)
+    }
+
+    constraint AtLeast1Output {
+        check: self.outputs().size() > 0
+        message: "Each calculator should have at least 1 output.".withCalculator(self)
+    }
 }
 
 context Expression {

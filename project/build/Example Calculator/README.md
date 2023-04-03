@@ -13,10 +13,10 @@ Calculating things, an example :)
 
 ### Outputs
 
-There are no output symbols.
+* z : Real
 
 ## Calculation Steps
 
 * y = (x + 1.23)
 * debug: show y
-* y = (x × (x + 1.23))
+* z = (x × (x + 1.23))

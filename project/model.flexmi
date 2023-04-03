@@ -10,6 +10,11 @@
             <primitivetype primitive="REAL"></primitivetype>
         </symbol>
     </symboldeclaration>
+    <symboldeclaration kind="output">
+        <symbol name="z">
+            <primitivetype primitive="REAL"></primitivetype>
+        </symbol>
+    </symboldeclaration>
     <assignmentstep symbol="y">
         <binaryexpression operation="ADDITION">
             <symbolexpression symbol="x"></symbolexpression>
@@ -17,7 +22,7 @@
         </binaryexpression>
     </assignmentstep>
     <printstep symbol="y"></printstep>
-    <assignmentstep symbol="y">
+    <assignmentstep symbol="z">
         <binaryexpression operation="MULTIPLICATION">
             <symbolexpression symbol="x"></symbolexpression>
             <binaryexpression operation="ADDITION">
