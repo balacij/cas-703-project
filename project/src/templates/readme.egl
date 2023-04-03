@@ -3,10 +3,9 @@
 [%=c.description%]
 
 ## Symbols
-[%var symbols = c.symbolDeclarations;%]
 
 ### Inputs
-[%var inputs = symbols.select(d|d.kind=SymbolDeclarationKind#INPUT).symbol;%]
+[%var inputs = c.inputs();%]
 
 [%for (s in inputs) {%]
 * [%=s.name%] : [%=s.type.serialize()%]
@@ -16,7 +15,7 @@ There are no input symbols.
 [%}%]
 
 ### Intermediates
-[%var intermediates = symbols.select(d|d.kind=SymbolDeclarationKind#INTERMEDIATE).symbol;%]
+[%var intermediates = c.intermediates();%]
 
 [%for (s in intermediates) {%]
 * [%=s.name%] : [%=s.type.serialize()%]
@@ -26,7 +25,7 @@ There are no intermediate symbols.
 [%}%]
 
 ### Outputs
-[%var outputs = symbols.select(d|d.kind=SymbolDeclarationKind#OUTPUT).symbol;%]
+[%var outputs = c.outputs();%]
 
 [%for (s in outputs) {%]
 * [%=s.name%] : [%=s.type.serialize()%]

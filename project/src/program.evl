@@ -1,14 +1,10 @@
 import "program.eol";
 
 context Calculator {
-    // todo; name should also only have simple names because it is used for
-    // creating folders
     constraint Name {
         check: self.name.length() > 1
         message: "Calculator must have a name."
     }
-
-    // todo: symbols should be unique for each calculator project
 }
 
 context Expression {

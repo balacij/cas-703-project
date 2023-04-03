@@ -1,4 +1,30 @@
-// TYPES
+// CALCULATOR
+
+@cached
+operation Calculator declarations(): Collection {
+    return self.symbolDeclarations;
+}
+
+operation Calculator symbolsOfKind(k : Any): Collection {
+    return self.declarations().select(d|d.kind=k).symbol;
+}
+
+@cached
+operation Calculator inputs(): Collection {
+    return self.symbolsOfKind(SymbolDeclarationKind#INPUT);
+}
+
+@cached
+operation Calculator intermediates(): Collection {
+    return self.symbolsOfKind(SymbolDeclarationKind#INTERMEDIATE);
+}
+
+@cached
+operation Calculator outputs(): Collection {
+    return self.symbolsOfKind(SymbolDeclarationKind#OUTPUT);
+}
+
+// STEPS
 
 operation AssignmentStep toHRN(): String {
     return self.symbol.name + " = " + self.body.toHRN();
@@ -7,6 +33,8 @@ operation AssignmentStep toHRN(): String {
 operation PrintStep toHRN(): String {
     return "debug: show " + self.symbol.name;
 }
+
+// TYPES
 
 @cached
 operation PrimitiveType serialize(): String {

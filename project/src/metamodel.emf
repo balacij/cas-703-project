@@ -141,7 +141,6 @@ class SymbolExpression extends Expression {
     ref Symbol[1] symbol;
 }
 
-// TODO: Need to add vector operations: dimension, magnitude
 enum UnaryOp {
 	LOGICAL_NOT;
 	NEGATION;
@@ -152,7 +151,6 @@ class UnaryExpression extends Expression {
 	val Expression[1] body;
 }
 
-// TODO: Need to add vector operations: dot, scale, add
 enum BinaryOp {
 	// numbers (of same type)
 	ADDITION; // also allowed for text and vectors
