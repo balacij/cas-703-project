@@ -1,7 +1,7 @@
 // TYPES
 
 operation AssignmentStep toHRN(): String {
-    return self.assignee.name + " = " + self.body.toHRN();
+    return self.symbol.name + " = " + self.body.toHRN();
 }
 
 operation PrintStep toHRN(): String {

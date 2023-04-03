@@ -48,7 +48,7 @@ QUESTIONS:
 
 */
 
-class Described {
+abstract class Described {
 	attr String[1] description = "";
 }
 
@@ -69,13 +69,13 @@ class SymbolDeclaration extends Described {
 	val Symbol[1] symbol;
 }
 
-abstract class CalculationStep {
+abstract class CalculationStep extends Described {
 	op String[1] toJava();
 	op String[1] toHRN();
 }
 
 class AssignmentStep extends CalculationStep {
-	ref Symbol[1] assignee; // LHS
+	ref Symbol[1] symbol; // LHS
 	val Expression[1] body; // RHS
 }
 
