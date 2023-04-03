@@ -1,9 +1,18 @@
 import "program.eol";
 
+operation String withCalculator(c : Calculator): String {
+    return c.name + ": " + self;
+}
+
 context Calculator {
-    constraint Name {
-        check: self.name.length() > 1
+    constraint NameLength {
+        check: self.name.length() >= 1
         message: "Calculator must have a name."
+    }
+
+    critique Description {
+        check: self.description.length() >= 1
+        message: "It would be nice if you defined a human-readable description of your calculator.".withCalculator(self)
     }
 }
 
