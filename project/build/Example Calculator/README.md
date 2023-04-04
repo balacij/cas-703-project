@@ -10,6 +10,7 @@
 ### Intermediates
 
 * y : Real
+* p : Boolean
 
 ### Outputs
 
@@ -30,4 +31,4 @@
 * x = 1.23
 
 **Assertions**:
-* (TRUE ∧ FALSE)
+* (TRUE ∧ p)

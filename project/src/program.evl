@@ -9,6 +9,10 @@ operation allUnique(c : Collection): Boolean {
     return c.size() == asSet.size();
 }
 
+operation Collection hasDuplicates(): Boolean {
+    return self.asSet().size() == self.size();
+}
+
 context Calculator {
     constraint NameLength {
         check: self.name.length() >= 1
@@ -45,14 +49,36 @@ context Calculator {
         message: "Each assignment step must be well-typed.".withCalculator(self)
     }
 
-    // constraint AllTestCaseInputExpressionsConstant {
-    //     check: self.testCases.forAll(testCase|testCase.assignments.forAll(asgn|asgn.symbol.declaration.kind==SymbolDeclarationKind#INPUT))
-    //     message: "Test case inputs should only assign input variables".withCalculator(self)
-    // }
+    constraint AllTestCaseInputSymbolsAreInputs {
+        check: self.testCases.forAll(testCase|testCase.assignments.forAll(asgn|asgn.symbol.declaration.kind==SymbolDeclarationKind#INPUT))
+        message: "Test case inputs should only assign values to input variables".withCalculator(self)
+    }
 
     constraint AllTestCaseInputExpressionsLiteral {
         check: self.testCases.forAll(testCase|testCase.assignments.forAll(asgn|asgn.body.symbolReferences().isEmpty()))
         message: "Test case inputs should not reference any symbol in their assignments.".withCalculator(self)
+    }
+
+    constraint AllTestCaseAssignAllInputs {
+        // note: using '>=' here because (a) we already ensure that each symbol assigned is an input
+        //       and that there are no duplicate assignments.
+        check: self.testCases.forAll(testCase|testCase.assignments.symbol.size() >= self.inputs().size())
+        message: "Test case inputs should assign a value to each input.".withCalculator(self)
+    }
+
+    constraint AllTestCaseInputsUnambiguous {
+        check: self.testCases.forAll(testCase|testCase.assignments.symbol.hasDuplicates())
+        message: "Test case inputs may not have ambiguous assignments for input symbols.".withCalculator(self)
+    }
+
+    constraint AllTestCaseAssertionsAreBooleanTyped {
+        check: self.testCases.forAll(testCase|testCase.assertions.forAll(e|isBoolTy(e.type())))
+        message: "Test case assertions must all be propositions (boolean-typed expressions)".withCalculator(self)
+    }
+
+    critique AllTestCaseAssertionsMeaningful {
+        check: self.testCases.forAll(testCase|testCase.assertions.forAll(e|not e.symbolReferences().isEmpty()))
+        message: "Each test case assertion should have at least 1 symbol reference, or else the check if superfluous".withCalculator(self)
     }
 }
 

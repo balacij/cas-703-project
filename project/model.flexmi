@@ -10,7 +10,12 @@
             <primitivetype primitive="REAL"></primitivetype>
         </symbol>
     </symboldeclaration>
-    <symboldeclaration kind="output">
+    <symboldeclaration kind="INTERMEDIATE">
+        <symbol name="p">
+            <primitivetype primitive="BOOLEAN"></primitivetype>
+        </symbol>
+    </symboldeclaration>
+    <symboldeclaration kind="OUTPUT">
         <symbol name="z">
             <primitivetype primitive="REAL"></primitivetype>
         </symbol>
@@ -37,7 +42,7 @@
         </assignmentstep>
         <binaryexpression operator="LOGICAL_AND">
             <booleanliteral value="true"></booleanliteral>
-            <booleanliteral value="false"></booleanliteral>
+            <symbolexpression symbol="p"></symbolexpression>
         </binaryexpression>
     </testcase>
 </calculator>
