@@ -1,5 +1,5 @@
 # Example Calculator
-Calculating things, an example :)
+*Calculating things, an example :)*
 
 ## Symbols
 
@@ -10,6 +10,7 @@ Calculating things, an example :)
 ### Intermediates
 
 * y : Real
+* p : Boolean
 
 ### Outputs
 
@@ -17,6 +18,26 @@ Calculating things, an example :)
 
 ## Calculation Steps
 
-* y = (x + 1.23)
-* debug: show y
-* z = (x × (x + 1.23))
+1. y = (x + 1.23)
+2. debug: show y
+3. z = (x × (x + 1.23))
+4. p = (z == z)
+
+## Test Cases
+
+### Test 1: first one
+*something for the description*
+
+**Inputs**:
+* x = 1.23
+
+**Assertions**:
+* (TRUE ∧ p)
+### Test 2: second one
+*something for the description*
+
+**Inputs**:
+* x = 1.23
+
+**Assertions**:
+* (FALSE ∨ p)
