@@ -37,7 +37,7 @@ operation Calculator assignmentSteps(): Collection {
 
 @cached
 operation Calculator hasAssignmentStep(s : Symbol): Boolean {
-    return self.assignmentSteps().exists(astep|astep.symbol=s);
+    return self.assignmentSteps().exists(astep|astep.symbol.name==s.name);
 }
 
 // STEPS
@@ -427,7 +427,7 @@ operation PrintStep simulate(scope : Map): Map {
 }
 
 operation TestCase isSatisfied(progSteps : Collection): Boolean {
-    // TODO: Create scope map
+    // Create scope map
     var emptyScope = Map{};
     var scope = Map{};
     for (asgn in self.assignments) {

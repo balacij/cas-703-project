@@ -44,6 +44,11 @@ context Calculator {
         message: "Each output symbol should be assigned at least once in your calculation steps.".withCalculator(self)
     }
 
+    constraint AllIntermediatesAssignedOnce {
+        check: self.intermediates().forAll(o|self.hasAssignmentStep(o))
+        message: "Each intermediate symbol should be assigned at least once in your calculation steps.".withCalculator(self)
+    }
+
     constraint AllAssignmentsWellTyped {
         check: self.assignmentSteps().forAll(astep|astep.symbol.type.equiv(astep.body.type()))
         message: "Each assignment step must be well-typed.".withCalculator(self)
@@ -81,7 +86,9 @@ context Calculator {
         message: "Each test case assertion should have at least 1 symbol reference, or else the check if superfluous".withCalculator(self)
     }
 
+    @lazy
     constraint AllTestCasesSatisfied {
+        guard: self.satisfiesAll("AllTestCaseAssertionsAreBooleanTyped", "WellTyped", "AllIntermediatesAssignedOnce", "AllOutputsAssignedOnce")
         check: self.testCases.forAll(testCase|testCase.isSatisfied(self.steps))
         message: "Not all test cases are satisfied! Check algorithm!".withCalculator(self)
     }
