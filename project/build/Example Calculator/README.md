@@ -29,10 +29,10 @@ deriving the outputs from the inputs.
 
 ## Calculation Steps
 
-1. y = (x + 1.23)
+1. y ≔ (x + 1.23)
 2. debug: show y
-3. z = (x × (x + 1.23))
-4. p = (z == z)
+3. z ≔ (x × (x + 1.23))
+4. p ≔ (z = z)
 
 ## Test Cases
 
@@ -44,7 +44,7 @@ calculator against them.
 *something for the description*
 
 **Inputs**:
-* x = 1.23
+* x ≔ 1.23
 
 **Assertions**:
 * (TRUE ∧ p)
@@ -53,7 +53,7 @@ calculator against them.
 *something for the description*
 
 **Inputs**:
-* x = 1.23
+* x ≔ 1.23
 
 **Assertions**:
 * (FALSE ∨ p)

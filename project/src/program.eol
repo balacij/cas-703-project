@@ -43,7 +43,7 @@ operation Calculator hasAssignmentStep(s : Symbol): Boolean {
 // STEPS
 
 operation AssignmentStep toHRN(): String {
-    return self.symbol.name + " = " + self.body.toHRN();
+    return self.symbol.name + " ≔ " + self.body.toHRN();
 }
 
 operation PrintStep toHRN(): String {
@@ -240,6 +240,8 @@ operation BinaryExpression type(): Type {
             }
             return invalidTy("both operands of and/or/implies are expected to be boolean-typed");      
         case BinaryOp#EQUIVALENT:
+            continue;
+        case BinaryOp#NOT_EQUIVALENT:
             if (leftTy.equiv(rightTy)) {
                 return primitiveType(Primitive#BOOLEAN);
             }
@@ -304,7 +306,9 @@ operation BinaryExpression toHRN(): String {
         case BinaryOp#LOGICAL_IMPLIES:
             op = "⇒";
         case BinaryOp#EQUIVALENT:
-            op = "==";
+            op = "=";
+        case BinaryOp#NOT_EQUIVALENT:
+            op = "≠";
     }
 
     return "(" + left + " " + op + " " + right + ")";
@@ -407,6 +411,8 @@ operation BinaryExpression evaluate(scope : Map): Any {
             value = (not left) or right;
 	    case BinaryOp#EQUIVALENT:
             value = left == right;
+        case BinaryOp#NOT_EQUIVALENT:
+            value = left != right;
     }
 
     return value;

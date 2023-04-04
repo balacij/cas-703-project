@@ -136,6 +136,7 @@ enum BinaryOp {
 	
 	// any
 	EQUIVALENT;
+	NOT_EQUIVALENT;
 }
 
 class BinaryExpression extends Expression {
