@@ -135,7 +135,7 @@ enum BinaryOp {
 	LOGICAL_IMPLIES;
 	
 	// any
-	EQUALITY;
+	EQUIVALENT;
 }
 
 class BinaryExpression extends Expression {

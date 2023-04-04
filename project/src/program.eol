@@ -239,11 +239,11 @@ operation BinaryExpression type(): Type {
                 return leftTy;
             }
             return invalidTy("both operands of and/or/implies are expected to be boolean-typed");      
-        case BinaryOp#EQUALITY:
+        case BinaryOp#EQUIVALENT:
             if (leftTy.equiv(rightTy)) {
                 return primitiveType(Primitive#BOOLEAN);
             }
-            return invalidTy("both operands of equality expected to be of the same type");
+            return invalidTy("both operands of equivalence expected to be of the same type");
     }
 }
 
@@ -303,7 +303,7 @@ operation BinaryExpression toHRN(): String {
             op = "∨";
         case BinaryOp#LOGICAL_IMPLIES:
             op = "⇒";
-        case BinaryOp#EQUALITY:
+        case BinaryOp#EQUIVALENT:
             op = "==";
     }
 
@@ -405,7 +405,7 @@ operation BinaryExpression evaluate(scope : Map): Any {
             value = left or right;
 	    case BinaryOp#LOGICAL_IMPLIES:
             value = (not left) or right;
-	    case BinaryOp#EQUALITY:
+	    case BinaryOp#EQUIVALENT:
             value = left == right;
     }
 

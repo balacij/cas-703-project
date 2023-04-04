@@ -37,7 +37,7 @@
         </binaryexpression>
     </assignmentstep>
     <assignmentstep symbol="p">
-        <binaryexpression operation="EQUALITY">
+        <binaryexpression operation="EQUIVALENT">
             <symbolexpression symbol="z"></symbolexpression>
             <symbolexpression symbol="z"></symbolexpression>
         </binaryexpression>
