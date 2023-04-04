@@ -31,4 +31,13 @@
             </binaryexpression>
         </binaryexpression>
     </assignmentstep>
+    <testcase name="first one" description="something for the description">
+        <assignmentstep symbol="x">
+            <realliteral value="1.23"></realliteral>
+        </assignmentstep>
+        <binaryexpression operator="LOGICAL_AND">
+            <booleanliteral value="true"></booleanliteral>
+            <booleanliteral value="false"></booleanliteral>
+        </binaryexpression>
+    </testcase>
 </calculator>

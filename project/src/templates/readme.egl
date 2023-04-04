@@ -1,45 +1,79 @@
 [%import "../program.eol";%]
 # [%=c.name%]
-[%=c.description%]
+[%if (c.description.length() > 0) {%]
+*[%=c.description%]*
+[%}%]
 
 ## Symbols
 
 ### Inputs
 [%var inputs = c.inputs();%]
 
+[%if (inputs.size() == 0) {%]
+There are no input symbols.
+[%} else {%]
 [%for (s in inputs) {%]
 * [%=s.name%] : [%=s.type.serialize()%]
 [%}%]
-[%if (inputs.size() == 0) {%]
-There are no input symbols.
 [%}%]
 
 ### Intermediates
 [%var intermediates = c.intermediates();%]
 
+[%if (intermediates.size() == 0) {%]
+There are no intermediate symbols.
+[%} else {%]
 [%for (s in intermediates) {%]
 * [%=s.name%] : [%=s.type.serialize()%]
 [%}%]
-[%if (intermediates.size() == 0) {%]
-There are no intermediate symbols.
 [%}%]
 
 ### Outputs
 [%var outputs = c.outputs();%]
 
+[%if (outputs.size() == 0) {%]
+There are no output symbols.
+[%} else {%]
 [%for (s in outputs) {%]
 * [%=s.name%] : [%=s.type.serialize()%]
 [%}%]
-[%if (outputs.size() == 0) {%]
-There are no output symbols.
 [%}%]
 
 ## Calculation Steps
 [%var steps = c.steps;%]
 
-[%for (step in steps) {%]
-* [%=step.toHRN()%]
-[%}%]
 [%if (steps.size() == 0) {%]
 There are no calculation steps;
+[%} else {
+    var sn = 0;
+    for (step in steps) {
+        sn += 1;%]
+[%=sn%]. [%=step.toHRN()%]
+    [%}
+}%]
+
+## Test Cases
+[%var testCases = c.testCases;%]
+
+[%if (testCases.size() == 0) {%]
+There are no test cases.
+[%} else {
+    var curTC = 1;
+    for (tc in testCases) {%]
+### Test [%=curTC%]: [%=tc.name%]
+        [%if (tc.description.length() > 0) {%]
+*[%=tc.description%]*
+        [%}%]
+
+**Inputs**:
+        [%for (input in tc.assignments) {%]
+* [%=input.toHRN()%]
+        [%}%]
+
+**Assertions**:
+        [%for (assertion in tc.assertions) {%]
+* [%=assertion.toHRN()%]
+        [%}%]
+        [%curTC += 1;
+    }%]
 [%}%]

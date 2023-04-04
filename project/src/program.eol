@@ -308,3 +308,42 @@ operation BinaryExpression toHRN(): String {
 
     return "(" + left + " " + op + " " + right + ")";
 }
+
+@cached
+operation TextLiteral symbolReferences(): Collection {
+    return Sequence{};
+}
+
+@cached
+operation RealLiteral symbolReferences(): Collection {
+    return Sequence{};
+}
+
+@cached
+operation IntegerLiteral symbolReferences(): Collection {
+    return Sequence{};
+}
+
+@cached
+operation BooleanLiteral symbolReferences(): Collection {
+    return Sequence{};
+}
+
+@cached
+operation SymbolExpression symbolReferences(): Collection {
+    var c = Sequence{};
+    c.add(self.symbol);
+    return c;
+}
+
+@cached
+operation UnaryExpression symbolReferences(): Collection {
+    return self.body.symbolReferences();
+}
+
+@cached
+operation BinaryExpression symbolReferences(): Collection {
+    var c = self.exprs[0].symbolReferences();
+    c.addAll(self.exprs[1].symbolReferences());
+    return c;
+}

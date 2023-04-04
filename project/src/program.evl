@@ -44,6 +44,16 @@ context Calculator {
         check: self.assignmentSteps().forAll(astep|astep.symbol.type.equiv(astep.body.type()))
         message: "Each assignment step must be well-typed.".withCalculator(self)
     }
+
+    // constraint AllTestCaseInputExpressionsConstant {
+    //     check: self.testCases.forAll(testCase|testCase.assignments.forAll(asgn|asgn.symbol.declaration.kind==SymbolDeclarationKind#INPUT))
+    //     message: "Test case inputs should only assign input variables".withCalculator(self)
+    // }
+
+    constraint AllTestCaseInputExpressionsLiteral {
+        check: self.testCases.forAll(testCase|testCase.assignments.forAll(asgn|asgn.body.symbolReferences().isEmpty()))
+        message: "Test case inputs should not reference any symbol in their assignments.".withCalculator(self)
+    }
 }
 
 context Expression {

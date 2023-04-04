@@ -13,6 +13,7 @@ class Calculator extends Described {
     attr String[1] name;
 	val SymbolDeclaration[*] symbolDeclarations;
 	val CalculationStep[*] steps;
+	val TestCase[*] testCases;
 }
 
 enum SymbolDeclarationKind {
@@ -40,8 +41,15 @@ class AssignmentStep extends CalculationStep {
 }
 
 class PrintStep extends CalculationStep {
-	attr String[+] preface;
+	attr String[1] preface;
 	ref Symbol[1] symbol;
+}
+
+// TEST CASES
+class TestCase extends Described {
+	attr String[1] name;
+	val AssignmentStep[+] assignments;
+	val Expression[+] assertions;
 }
 
 // TYPES
@@ -74,6 +82,7 @@ class InvalidType extends Type {
 abstract class Expression {
 	op Type[1] type();
 	op String[1] toHRN();
+	op Symbol[*] symbolReferences();
 }
 
 class TextLiteral extends Expression {
