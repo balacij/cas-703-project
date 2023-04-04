@@ -220,6 +220,8 @@ operation BinaryExpression type(): Type {
             return invalidTy("both operands of an addition/catenation must be numerics/text");
         case BinaryOp#MULTIPLICATION:
             continue;
+        case BinaryOp#DIVISION:
+            continue;
         case BinaryOp#SUBTRACTION:
             continue;
         case BinaryOp#POWER:
@@ -288,6 +290,8 @@ operation BinaryExpression toHRN(): String {
             op = "+";
         case BinaryOp#MULTIPLICATION:
             op = "×";
+        case BinaryOp#DIVISION:
+            return "(" + left + ") / (" + right + ")";
         case BinaryOp#SUBTRACTION:
             op = "-";
         case BinaryOp#POWER:

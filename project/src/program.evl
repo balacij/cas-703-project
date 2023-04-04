@@ -39,6 +39,11 @@ context Calculator {
         check: self.outputs().forAll(o|self.hasAssignmentStep(o))
         message: "Each output symbol should be assigned at least once in your calculation steps.".withCalculator(self)
     }
+
+    constraint AllAssignmentsWellTyped {
+        check: self.assignmentSteps().forAll(astep|astep.symbol.type.equiv(astep.body.type()))
+        message: "Each assignment step must be well-typed.".withCalculator(self)
+    }
 }
 
 context Expression {
