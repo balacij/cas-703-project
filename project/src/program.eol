@@ -30,6 +30,16 @@ operation Calculator outputs(): Collection {
     return self.symbolsOfKind(SymbolDeclarationKind#OUTPUT);
 }
 
+@cached
+operation Calculator assignmentSteps(): Collection {
+    return self.steps.selectByType(AssignmentStep);
+}
+
+@cached
+operation Calculator hasAssignmentStep(s : Symbol): Boolean {
+    return self.assignmentSteps().exists(astep|astep.symbol=s);
+}
+
 // STEPS
 
 operation AssignmentStep toHRN(): String {
