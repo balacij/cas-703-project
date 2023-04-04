@@ -224,8 +224,17 @@ operation BinaryExpression type(): Type {
             continue;
         case BinaryOp#SUBTRACTION:
             continue;
-        case BinaryOp#POWER:
-            // TODO FIXME: should power only apply to real numbers?
+        case BinaryOp#POWER: // TODO FIXME: should power only apply to real numbers?
+            continue;
+        case BinaryOp#MODULO:
+            continue;
+        case BinaryOp#GREATER_THAN:
+            continue;
+        case BinaryOp#GREATER_THAN_EQUAL_TO:
+            continue;
+        case BinaryOp#LESS_THAN:
+            continue;
+        case BinaryOp#LESS_THAN_EQUAL_TO:
             if (leftTy.equiv(rightTy) and isNumericTy(leftTy)) {
                 return leftTy;
             }
@@ -299,6 +308,16 @@ operation BinaryExpression toHRN(): String {
             op = "-";
         case BinaryOp#POWER:
             op = "^";
+        case BinaryOp#MODULO:
+            op = "%";
+        case BinaryOp#GREATER_THAN:
+            op = ">";
+        case BinaryOp#GREATER_THAN_EQUAL_TO:
+            op = "≥";
+        case BinaryOp#LESS_THAN:
+            op = "<";
+        case BinaryOp#LESS_THAN_EQUAL_TO:
+            op = "≤";
         case BinaryOp#LOGICAL_AND:
             op = "∧";
         case BinaryOp#LOGICAL_OR:
@@ -403,6 +422,16 @@ operation BinaryExpression evaluate(scope : Map): Any {
             value = left - right;
 	    case BinaryOp#POWER:
             value = left.pow(right); // TODO: be careful here
+        case BinaryOp#MODULO:
+            value = left.mod(right);
+        case BinaryOp#GREATER_THAN:
+            value = left > right;
+        case BinaryOp#GREATER_THAN_EQUAL_TO:
+            value = left >= right;
+        case BinaryOp#LESS_THAN:
+            value = left < right;
+        case BinaryOp#LESS_THAN_EQUAL_TO:
+            value = left <= right;
 	    case BinaryOp#LOGICAL_AND:
             value = left and right;
 	    case BinaryOp#LOGICAL_OR:
