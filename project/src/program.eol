@@ -462,3 +462,7 @@ operation TestCase isSatisfied(progSteps : Collection): Boolean {
 
     return allAssertionsSatisfied;
 }
+
+operation String withDefault(s : String): String {
+    return self.length() == 0 ? s : self;
+}

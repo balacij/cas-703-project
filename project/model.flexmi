@@ -1,11 +1,11 @@
 <?nsuri calculator?>
 <calculator name="Example Calculator" description="Calculating things, an example :)">
-    <symboldeclaration kind="INPUT">
+    <symboldeclaration kind="INPUT" description="some expected input variable">
         <symbol name="x">
             <primitivetype primitive="REAL"></primitivetype>
         </symbol>
     </symboldeclaration>
-    <symboldeclaration kind="INTERMEDIATE">
+    <symboldeclaration kind="INTERMEDIATE" description="some meaningful piece of data">
         <symbol name="y">
             <primitivetype primitive="REAL"></primitivetype>
         </symbol>
@@ -15,7 +15,7 @@
             <primitivetype primitive="BOOLEAN"></primitivetype>
         </symbol>
     </symboldeclaration>
-    <symboldeclaration kind="OUTPUT">
+    <symboldeclaration kind="OUTPUT" description="This is a description!">
         <symbol name="z">
             <primitivetype primitive="REAL"></primitivetype>
         </symbol>
