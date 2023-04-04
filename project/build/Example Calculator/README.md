@@ -21,6 +21,7 @@
 1. y = (x + 1.23)
 2. debug: show y
 3. z = (x × (x + 1.23))
+4. p = (z == z)
 
 ## Test Cases
 
@@ -32,3 +33,11 @@
 
 **Assertions**:
 * (TRUE ∧ p)
+### Test 2: second one
+*something for the description*
+
+**Inputs**:
+* x = 1.23
+
+**Assertions**:
+* (FALSE ∨ p)

@@ -225,6 +225,7 @@ operation BinaryExpression type(): Type {
         case BinaryOp#SUBTRACTION:
             continue;
         case BinaryOp#POWER:
+            // TODO FIXME: should power only apply to real numbers?
             if (leftTy.equiv(rightTy) and isNumericTy(leftTy)) {
                 return leftTy;
             }
@@ -346,4 +347,118 @@ operation BinaryExpression symbolReferences(): Collection {
     var c = self.exprs[0].symbolReferences();
     c.addAll(self.exprs[1].symbolReferences());
     return c;
+}
+
+// EVALUATION SIMULATION
+operation TextLiteral evaluate(scope : Map): Any {
+    return self.value;
+}
+
+operation RealLiteral evaluate(scope : Map): Any {
+    return self.value;
+}
+
+operation IntegerLiteral evaluate(scope : Map): Any {
+    return self.value;
+}
+
+operation BooleanLiteral evaluate(scope : Map): Any {
+    return self.value;
+}
+
+operation SymbolExpression evaluate(scope : Map): Any {
+    return scope.get(self.symbol.name);
+}
+
+operation UnaryExpression evaluate(scope : Map): Any {
+    var value = self.body.evaluate(scope);
+
+    switch (self.operator) {
+        case UnaryOp#LOGICAL_NOT:
+            value = not value;
+        case UnaryOp#NEGATION:
+            value = - value;
+    }
+
+    return value;
+}
+
+operation BinaryExpression evaluate(scope : Map): Any {
+    var left = self.exprs[0].evaluate(scope);
+    var right = self.exprs[1].evaluate(scope);
+    var value = null;
+
+    switch (self.operator) {
+	    case BinaryOp#ADDITION:
+            value = left + right;
+	    case BinaryOp#MULTIPLICATION:
+            value = left * right;
+	    case BinaryOp#DIVISION:
+            value = left / right; // TODO: be careful here
+	    case BinaryOp#SUBTRACTION:
+            value = left - right;
+	    case BinaryOp#POWER:
+            value = left.pow(right); // TODO: be careful here
+	    case BinaryOp#LOGICAL_AND:
+            value = left and right;
+	    case BinaryOp#LOGICAL_OR:
+            value = left or right;
+	    case BinaryOp#LOGICAL_IMPLIES:
+            value = (not left) or right;
+	    case BinaryOp#EQUALITY:
+            value = left == right;
+    }
+
+    return value;
+}
+
+operation AssignmentStep simulate(scope : Map): Map {
+    scope.put(self.symbol.name, self.body.evaluate(scope));
+    return scope;
+}
+
+operation PrintStep simulate(scope : Map): Map {
+    var stub = self.symbol.name + " = " + scope.get(self.symbol.name).asString();
+    if (self.preface?.length() > 0) {
+        stub = stub + " ~ " + self.preface;
+    }
+    stub.println();
+    return scope;
+}
+
+operation TestCase isSatisfied(progSteps : Collection): Boolean {
+    // TODO: Create scope map
+    var emptyScope = Map{};
+    var scope = Map{};
+    for (asgn in self.assignments) {
+        scope.put(asgn.symbol.name, asgn.body.evaluate(emptyScope)); // note: each input should have an empty scope!
+    }
+    ("Testing assertion: " + self.name + ", with input set: " + scope.asString()).println();   
+    
+    // Simulate algorithm steps
+    for (step in progSteps) {
+        ("Simulating step: " + step.toHRN()).println();
+        scope = step.simulate(scope);
+    }
+
+    // Evaluate assertions on the scope and ensure that they are all satisfied
+    var allAssertionsSatisfied = true;
+    for (assertable in self.assertions) {
+        ("Checking assertion: " + assertable.toHRN() + "... ").print();
+        if (assertable.evaluate(scope)) {
+            "Ok!".println();
+        } else {
+            "Failed!".println();
+            allAssertionsSatisfied = false;
+            break;
+        }
+    }
+
+    if (allAssertionsSatisfied) {
+        ("Test case " + self.name + " SUCCEEDED!").println();
+    } else {
+        ("Test case " + self.name + " FAILED!").println();
+    }
+
+    return allAssertionsSatisfied;
 }

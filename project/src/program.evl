@@ -80,6 +80,11 @@ context Calculator {
         check: self.testCases.forAll(testCase|testCase.assertions.forAll(e|not e.symbolReferences().isEmpty()))
         message: "Each test case assertion should have at least 1 symbol reference, or else the check if superfluous".withCalculator(self)
     }
+
+    constraint AllTestCasesSatisfied {
+        check: self.testCases.forAll(testCase|testCase.isSatisfied(self.steps))
+        message: "Not all test cases are satisfied! Check algorithm!".withCalculator(self)
+    }
 }
 
 context Expression {

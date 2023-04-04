@@ -36,12 +36,27 @@
             </binaryexpression>
         </binaryexpression>
     </assignmentstep>
+    <assignmentstep symbol="p">
+        <binaryexpression operation="EQUALITY">
+            <symbolexpression symbol="z"></symbolexpression>
+            <symbolexpression symbol="z"></symbolexpression>
+        </binaryexpression>
+    </assignmentstep>
     <testcase name="first one" description="something for the description">
         <assignmentstep symbol="x">
             <realliteral value="1.23"></realliteral>
         </assignmentstep>
         <binaryexpression operator="LOGICAL_AND">
             <booleanliteral value="true"></booleanliteral>
+            <symbolexpression symbol="p"></symbolexpression>
+        </binaryexpression>
+    </testcase>
+    <testcase name="second one" description="something for the description">
+        <assignmentstep symbol="x">
+            <realliteral value="1.23"></realliteral>
+        </assignmentstep>
+        <binaryexpression operator="LOGICAL_OR">
+            <booleanliteral value="false"></booleanliteral>
             <symbolexpression symbol="p"></symbolexpression>
         </binaryexpression>
     </testcase>
