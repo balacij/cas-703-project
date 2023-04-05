@@ -28,7 +28,7 @@
     </assignmentstep>
     <printstep symbol="y"></printstep>
     <assignmentstep symbol="z">
-        <binaryexpression operation="MULTIPLICATION">
+        <binaryexpression operator="MULTIPLICATION">
             <symbolexpression symbol="x"></symbolexpression>
             <binaryexpression operation="ADDITION">
                 <symbolexpression symbol="x"></symbolexpression>
@@ -37,10 +37,17 @@
         </binaryexpression>
     </assignmentstep>
     <assignmentstep symbol="p">
-        <binaryexpression operation="EQUIVALENT">
+        <binaryexpression operator="EQUIVALENT">
             <symbolexpression symbol="z"></symbolexpression>
             <symbolexpression symbol="z"></symbolexpression>
         </binaryexpression>
+    </assignmentstep>
+    <assignmentstep symbol="z">
+        <tertiaryexpression operator="IF_THEN_ELSE">
+            <symbolexpression symbol="p"></symbolexpression>
+            <realliteral value="1.23"></realliteral>
+            <symbolexpression symbol="z"></symbolexpression>
+        </tertiaryexpression>
     </assignmentstep>
     <testcase name="first one" description="something for the description">
         <assignmentstep symbol="x">
@@ -49,6 +56,10 @@
         <binaryexpression operator="LOGICAL_AND">
             <booleanliteral value="true"></booleanliteral>
             <symbolexpression symbol="p"></symbolexpression>
+        </binaryexpression>
+        <binaryexpression operator="EQUIVALENT">
+            <symbolexpression symbol="z"></symbolexpression>
+            <realliteral value="1.23"></realliteral>
         </binaryexpression>
     </testcase>
     <testcase name="second one" description="something for the description">

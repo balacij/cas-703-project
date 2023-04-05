@@ -101,7 +101,6 @@ context Calculator {
         message: "Each step's symbol dependencies must be satisfied before that step.".withCalculator(self)
     }
 
-    @lazy
     constraint AllTestCasesSatisfied {
         guard: self.satisfiesAll("AllStepsDepsHaveValues", "AllTestCaseAssertionsAreBooleanTyped", "WellTyped", "AllIntermediatesAssignedOnce", "AllOutputsAssignedOnce")
         check: self.testCases.forAll(testCase|testCase.isSatisfied(self.steps))

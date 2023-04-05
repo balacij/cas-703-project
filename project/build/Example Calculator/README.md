@@ -33,6 +33,7 @@ deriving the outputs from the inputs.
 2. debug: show y
 3. z ≔ (x × (x + 1.23))
 4. p ≔ (z = z)
+5. z ≔ (if p then 1.23 else z)
 
 ## Test Cases
 
@@ -48,6 +49,7 @@ calculator against them.
 
 **Assertions**:
 * (TRUE ∧ p)
+* (z = 1.23)
 
 ### Test 2: second one
 *something for the description*

@@ -152,3 +152,12 @@ class BinaryExpression extends Expression {
 	attr BinaryOp[1] operator;
 	val Expression[2] exprs;
 }
+
+enum TertiaryOp {
+	IF_THEN_ELSE;
+}
+
+class TertiaryExpression extends Expression {
+	attr TertiaryOp[1] operator;
+	val Expression[2] exprs;
+}

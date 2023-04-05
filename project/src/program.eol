@@ -179,6 +179,10 @@ operation SymbolExpression type(): Type {
     return self.symbol.type;
 }
 
+operation logIllTypedExpression(e : Expression) {
+    ("ill-typed expression found: " + e.toHRN()).println();
+}
+
 @cached
 operation UnaryExpression type(): Type {
     var bodyTy = self.body.type();
@@ -238,6 +242,10 @@ operation BinaryExpression type(): Type {
             if (leftTy.equiv(rightTy) and isNumericTy(leftTy)) {
                 return leftTy;
             }
+            ("op: " + self.operator).println();
+            ("leftTy: " + leftTy.toHRN()).println();
+            ("rightTy: " + rightTy.toHRN()).println();
+            ("expr: " + self.toHRN()).println();
             return invalidTy("both operands of mul/sub/pow expected to be the same numeric type");
         case BinaryOp#LOGICAL_AND:
             continue;
@@ -255,6 +263,37 @@ operation BinaryExpression type(): Type {
                 return primitiveType(Primitive#BOOLEAN);
             }
             return invalidTy("both operands of equivalence expected to be of the same type");
+    }
+}
+
+@cached
+operation TertiaryExpression type(): Type {
+    var fstTy = self.exprs[0].type();
+    var sndTy = self.exprs[1].type();
+    var thdTy = self.exprs[2].type();
+
+    if (isInvalid(fstTy)) {
+        return fstTy;
+    }
+
+    if (isInvalid(sndTy)) {
+        return sndTy;
+    }
+
+    if (isInvalid(thdTy)) {
+        return thdTy;
+    }
+
+    switch (self.operator) {
+        case TertiaryOp#IF_THEN_ELSE:
+            if (not isBoolTy(fstTy)) {
+                return invalidTy("condition of if/then/else must be boolean typed");
+            }
+
+            if (sndTy.equiv(thdTy)) {
+                return sndTy;
+            }
+            return invalidTy("operands of if/then/else must be of the same type");
     }
 }
 
@@ -334,6 +373,18 @@ operation BinaryExpression toHRN(): String {
 }
 
 @cached
+operation TertiaryExpression toHRN(): String {
+    var fst = self.exprs[0].toHRN();
+    var snd = self.exprs[1].toHRN();
+    var thd = self.exprs[2].toHRN();
+
+    switch (self.operator) {
+        case (TertiaryOp#IF_THEN_ELSE):
+            return "(if " + fst + " then " + snd + " else " + thd + ")";
+    }
+}
+
+@cached
 operation TextLiteral symbolReferences(): Collection {
     return Sequence{};
 }
@@ -369,6 +420,14 @@ operation UnaryExpression symbolReferences(): Collection {
 operation BinaryExpression symbolReferences(): Collection {
     var c = self.exprs[0].symbolReferences();
     c.addAll(self.exprs[1].symbolReferences());
+    return c;
+}
+
+@cached
+operation TertiaryExpression symbolReferences(): Collection {
+    var c = self.exprs[0].symbolReferences();
+    c.addAll(self.exprs[1].symbolReferences());
+    c.addAll(self.exprs[2].symbolReferences());
     return c;
 }
 
@@ -442,6 +501,22 @@ operation BinaryExpression evaluate(scope : Map): Any {
             value = left == right;
         case BinaryOp#NOT_EQUIVALENT:
             value = left != right;
+    }
+
+    return value;
+}
+
+operation TertiaryExpression evaluate(scope : Map): Any {
+    var fst = self.exprs[0].evaluate(scope);
+    var value = null;
+
+    switch (self.operator) {
+        case TertiaryOp#IF_THEN_ELSE:
+            if (fst) {
+                value = self.exprs[1].evaluate(scope);
+            } else {
+                value = self.exprs[2].evaluate(scope);
+            }
     }
 
     return value;
