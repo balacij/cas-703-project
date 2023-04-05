@@ -1,6 +1,8 @@
-# Validated General-Purposes Calculator
+# Validated General-Purpose Calculator
 
-A project created for CAS 703, by Hassan Zaker Zavardehi and Jason Balaci.
+A project created for CAS 703, by [Hassan Zaker
+Zavardehi](mailto:zakerzah@mcmaster.ca) and [Jason
+Balaci](mailto:balacij@mcmaster.ca).
 
 ## Objective
 

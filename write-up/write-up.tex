@@ -13,7 +13,15 @@
 % Enable links within the document
 \usepackage{hyperref}
 \usepackage{titlesec}
-\titlespacing*{\section}{0pt}{0.4\baselineskip}{\baselineskip}
+
+\usepackage[
+  a4paper,
+  top=3.8cm,
+  bottom=2.5cm,
+  inner=2.5cm,
+  outer=2.5cm,
+  headheight=15pt,
+]{geometry}
 
 \hypersetup{
   colorlinks=true,
@@ -22,13 +30,6 @@
   breaklinks=true,
 }
 \urlstyle{rm} % Make URL styled fonts match hyperref's hrefs
-
-\setlength {\topmargin} {-0.15in}
-\setlength{\textwidth}{6.5in}
-\setlength{\hoffset}{-0.8in}
-\setlength {\textheight} {8.6in}
-\setlength {\footskip} {0.9in}
-
 
 % Credit to Gabriel Devenyi for this bibliography cfg:
 % github.com/gdevenyi/mcmaster.latex
@@ -43,11 +44,11 @@
 ]{biblatex} % bibliography
 \addbibresource{references.bib}
 
-\title{\vspace{-3.5cm}CAS 703 Software Project: Calculators}
-\author{Hassan \and Jason}
+\title{\vspace{-3.5cm}CAS 703 Term Project: Validated General-Purpose Calculators}
+\author{Hassan Zaker \and Jason Balaci}
 
 \date{
-	McMaster University \\ \texttt{\{, balacij\}@mcmaster.ca}\\%
+	McMaster University \\ \texttt{\{zakerzah, balacij\}@mcmaster.ca}\\%
 	\today
 }
 
@@ -60,14 +61,53 @@
 
 \tableofcontents
 
+\newpage{}
+
 %------------------------------------------------------------------------------
 % Introduction
 %------------------------------------------------------------------------------
 \section{Introduction}
 
-% %------------------------------------------------------------------------------
-% % Bibliography
-% %------------------------------------------------------------------------------
-% \printbibliography[heading=bibintoc]
+\newpage{}
+
+%------------------------------------------------------------------------------
+% Modelling
+%------------------------------------------------------------------------------
+\section{Modelling}
+
+\newpage{}
+
+%------------------------------------------------------------------------------
+% IDE
+%------------------------------------------------------------------------------
+\section{Integrated Development Environment}
+
+\newpage{}
+
+%------------------------------------------------------------------------------
+% Model Validation
+%------------------------------------------------------------------------------
+\section{Model Validation}
+
+\newpage{}
+
+%------------------------------------------------------------------------------
+% Model Management Operations
+%------------------------------------------------------------------------------
+\section{Model Management Operations}
+
+\newpage{}
+
+%------------------------------------------------------------------------------
+% Reflection and Concluding Thoughts
+%------------------------------------------------------------------------------
+\section{Reflection and Concluding Thoughts}
+
+\newpage{}
+
+%------------------------------------------------------------------------------
+% Bibliography
+%------------------------------------------------------------------------------
+\printbibliography[heading=bibintoc]
 
 \end{document}
