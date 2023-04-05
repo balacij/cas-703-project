@@ -69,9 +69,7 @@ There are no calculation steps;
 [%if (testCases.size() == 0) {%]
 There are no test cases.
 [%} else {%]
-The generated program was tested in a simulation against the following test
-cases. An extra test stub is also created if you'd like to also test your
-calculator against them.
+The algorithm was tested in a simulation against the below test cases.
 [%  var curTC = 1;
     for (tc in testCases) {%]
 
