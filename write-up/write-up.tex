@@ -31,6 +31,8 @@
 }
 \urlstyle{rm} % Make URL styled fonts match hyperref's hrefs
 
+\usepackage{cleveref}
+
 % Credit to Gabriel Devenyi for this bibliography cfg:
 % github.com/gdevenyi/mcmaster.latex
 \usepackage[
@@ -43,6 +45,9 @@
   seconds=true
 ]{biblatex} % bibliography
 \addbibresource{references.bib}
+
+% Soure code
+\usepackage{listings}
 
 \title{\vspace{-3.5cm}CAS 703 Term Project: Validated General-Purpose Calculators}
 \author{Hassan Zaker \and Jason Balaci}
@@ -67,6 +72,46 @@
 % Introduction
 %------------------------------------------------------------------------------
 \section{Introduction}
+\label{sec:introduction}
+
+For our term project in CAS 703~\cite{Paige7032023}, we decided to build a
+language for describing calculation schemes. The descriptions should be mostly
+understandable to anyone who has worked with Excel~\cite{Excel} or has used any
+kind of calculation software. We aim to validate the
+coherence\footnote{``Coherence'' defined by an unambiguous set of constraints
+and rules.} of the calculator descriptions. Additionally, through generative
+techniques, we hope to decrease the barrier to entry (as much as we can) of
+basic software development of calculator programs by defining a transformation
+of the calculator descriptions to various programming
+languages\footnote{Notably, Java programs.}.
+
+\subsection{Objective}
+
+We aim to:
+
+\begin{enumerate}
+
+  \item design a metamodel for describing calculator programs
+        (\Cref{sec:modelling}),
+
+  \item build a concrete syntax for the metamodel, and an Integrated Development
+        Environment (IDE) for said concrete syntax
+        (\Cref{sec:integrated-development-environment}),
+
+  \item design a set of rules that define ``coherence'' rules of the metamodel
+        and audit instances of the metamodel for coherence
+        (\Cref{sec:model-validation}), and
+
+  \item define a transformer that converts the calculator description into
+        programs and corresponding documentation
+        (\Cref{sec:model-management-operations}).
+
+\end{enumerate}
+
+\subsection{Tooling}
+
+We will use the tooling shown in 703, namely: Eclipse Epsilon~\cite{Epsilon} and
+the languages it contains, and Xtext~\cite{Xtext}.
 
 \newpage{}
 
@@ -74,6 +119,7 @@
 % Modelling
 %------------------------------------------------------------------------------
 \section{Modelling}
+\label{sec:modelling}
 
 \newpage{}
 
@@ -81,6 +127,7 @@
 % IDE
 %------------------------------------------------------------------------------
 \section{Integrated Development Environment}
+\label{sec:integrated-development-environment}
 
 \newpage{}
 
@@ -88,6 +135,7 @@
 % Model Validation
 %------------------------------------------------------------------------------
 \section{Model Validation}
+\label{sec:model-validation}
 
 \newpage{}
 
@@ -95,6 +143,7 @@
 % Model Management Operations
 %------------------------------------------------------------------------------
 \section{Model Management Operations}
+\label{sec:model-management-operations}
 
 \newpage{}
 
@@ -102,6 +151,7 @@
 % Reflection and Concluding Thoughts
 %------------------------------------------------------------------------------
 \section{Reflection and Concluding Thoughts}
+\label{sec:reflection-and-concluding-thoughts}
 
 \newpage{}
 
