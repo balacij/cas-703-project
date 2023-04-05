@@ -18,7 +18,7 @@ deriving the outputs from the inputs.
 There are no input symbols.
 [%} else {%]
 | Symbol | Description | Type |
-|:------:|:-----------:|:----:|
+|:------:|:------------|:----:|
 [%    for (s in inputs) {%]
 | [%=s.name%] | [%=s.declaration.description.withDefault("—")%] | [%=s.type.serialize()%] |
 [%    }%]
@@ -31,7 +31,7 @@ There are no input symbols.
 There are no intermediate symbols.
 [%} else {%]
 | Symbol | Description | Type |
-|:------:|:-----------:|:----:|
+|:------:|:------------|:----:|
 [%    for (s in intermediates) {%]
 | [%=s.name%] | [%=s.declaration.description.withDefault("—")%] | [%=s.type.serialize()%] |
 [%    }%]
@@ -44,10 +44,10 @@ There are no intermediate symbols.
 There are no output symbols.
 [%} else {%]
 | Symbol | Description | Type |
-|:------:|:-----------:|:----:|
-[%  for (s in outputs) {%]
+|:------:|:------------|:----:|
+[%    for (s in outputs) {%]
 | [%=s.name%] | [%=s.declaration.description.withDefault("—")%] | [%=s.type.serialize()%] |
-[%  }%]
+[%    }%]
 [%}%]
 
 ## Calculation Steps

@@ -11,20 +11,20 @@ deriving the outputs from the inputs.
 ### Inputs
 
 | Symbol | Description | Type |
-|:------:|:-----------:|:----:|
+|:------:|:------------|:----:|
 | x | some expected input variable | Real |
 
 ### Intermediates
 
 | Symbol | Description | Type |
-|:------:|:-----------:|:----:|
+|:------:|:------------|:----:|
 | y | some meaningful piece of data | Real |
 | p | — | Boolean |
 
 ### Outputs
 
 | Symbol | Description | Type |
-|:------:|:-----------:|:----:|
+|:------:|:------------|:----:|
 | z | This is a description! | Real |
 
 ## Calculation Steps
@@ -37,9 +37,7 @@ deriving the outputs from the inputs.
 
 ## Test Cases
 
-The generated program was tested in a simulation against the following test
-cases. An extra test stub is also created if you'd like to also test your
-calculator against them.
+The algorithm was tested in a simulation against the below test cases.
 
 ### Test 1: first one
 *something for the description*
