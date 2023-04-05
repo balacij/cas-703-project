@@ -33,6 +33,8 @@ class SymbolDeclaration extends Described {
 
 abstract class CalculationStep extends Described {
 	op String[1] toHRN();
+	op Symbol[*] dependencies();
+	op Symbol[*] calculates();
 }
 
 class AssignmentStep extends CalculationStep {
@@ -128,6 +130,13 @@ enum BinaryOp {
 	DIVISION;
 	SUBTRACTION;
 	POWER;
+	MODULO;
+
+	// inequalities
+	GREATER_THAN;
+	GREATER_THAN_EQUAL_TO;
+	LESS_THAN;
+	LESS_THAN_EQUAL_TO;
 	
 	// booleans
 	LOGICAL_AND;
@@ -135,10 +144,20 @@ enum BinaryOp {
 	LOGICAL_IMPLIES;
 	
 	// any
-	EQUALITY;
+	EQUIVALENT;
+	NOT_EQUIVALENT;
 }
 
 class BinaryExpression extends Expression {
 	attr BinaryOp[1] operator;
+	val Expression[2] exprs;
+}
+
+enum TertiaryOp {
+	IF_THEN_ELSE;
+}
+
+class TertiaryExpression extends Expression {
+	attr TertiaryOp[1] operator;
 	val Expression[2] exprs;
 }

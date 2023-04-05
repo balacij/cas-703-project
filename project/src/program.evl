@@ -39,6 +39,16 @@ context Calculator {
         message: "Each calculator should have at least 1 output.".withCalculator(self)
     }
 
+    critique AllInputsDescribed {
+        check: self.inputs().declaration.description.forAll(s|s.length() > 0)
+        message: "Each input symbol should have a description for usability.".withCalculator(self)
+    }
+
+    critique AllOutputsDescribed {
+        check: self.outputs().declaration.description.forAll(s|s.length() > 0)
+        message: "Each output symbol should have a description for usability.".withCalculator(self)
+    }
+
     constraint AllOutputsAssignedOnce {
         check: self.outputs().forAll(o|self.hasAssignmentStep(o))
         message: "Each output symbol should be assigned at least once in your calculation steps.".withCalculator(self)
@@ -86,9 +96,13 @@ context Calculator {
         message: "Each test case assertion should have at least 1 symbol reference, or else the check if superfluous".withCalculator(self)
     }
 
-    @lazy
+    constraint AllStepsDepsHaveValues {
+        check: self.checkStepDependencies()
+        message: "Each step's symbol dependencies must be satisfied before that step.".withCalculator(self)
+    }
+
     constraint AllTestCasesSatisfied {
-        guard: self.satisfiesAll("AllTestCaseAssertionsAreBooleanTyped", "WellTyped", "AllIntermediatesAssignedOnce", "AllOutputsAssignedOnce")
+        guard: self.satisfiesAll("AllStepsDepsHaveValues", "AllTestCaseAssertionsAreBooleanTyped", "WellTyped", "AllIntermediatesAssignedOnce", "AllOutputsAssignedOnce")
         check: self.testCases.forAll(testCase|testCase.isSatisfied(self.steps))
         message: "Not all test cases are satisfied! Check algorithm!".withCalculator(self)
     }
