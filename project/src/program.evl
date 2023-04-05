@@ -96,9 +96,14 @@ context Calculator {
         message: "Each test case assertion should have at least 1 symbol reference, or else the check if superfluous".withCalculator(self)
     }
 
+    constraint AllStepsDepsHaveValues {
+        check: self.checkStepDependencies()
+        message: "Each step's symbol dependencies must be satisfied before that step.".withCalculator(self)
+    }
+
     @lazy
     constraint AllTestCasesSatisfied {
-        guard: self.satisfiesAll("AllTestCaseAssertionsAreBooleanTyped", "WellTyped", "AllIntermediatesAssignedOnce", "AllOutputsAssignedOnce")
+        guard: self.satisfiesAll("AllStepsDepsHaveValues", "AllTestCaseAssertionsAreBooleanTyped", "WellTyped", "AllIntermediatesAssignedOnce", "AllOutputsAssignedOnce")
         check: self.testCases.forAll(testCase|testCase.isSatisfied(self.steps))
         message: "Not all test cases are satisfied! Check algorithm!".withCalculator(self)
     }

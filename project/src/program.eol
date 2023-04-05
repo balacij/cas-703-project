@@ -501,3 +501,34 @@ operation TestCase isSatisfied(progSteps : Collection): Boolean {
 operation String withDefault(s : String): String {
     return self.length() == 0 ? s : self;
 }
+
+operation PrintStep dependencies(): Collection {
+    return Sequence{self.symbol};
+}
+
+operation PrintStep calculates(): Collection {
+    return Sequence{};
+}
+
+operation AssignmentStep dependencies(): Collection {
+    return self.body.symbolReferences();
+}
+
+operation AssignmentStep calculates(): Collection {
+    return Sequence{self.symbol};
+}
+
+operation Calculator checkStepDependencies(): Boolean {
+    var ok = true;
+    var assigned = self.inputs().clone();
+
+    for (step in self.steps) {
+        if (not assigned.includesAll(step.dependencies())) {
+            ok = false;
+            break;
+        }
+        assigned.addAll(step.calculates());
+    }
+
+    return ok;
+}
