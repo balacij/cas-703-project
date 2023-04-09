@@ -50,6 +50,14 @@ operation PrintStep toHRN(): String {
     return "debug: show " + self.symbol.name;
 }
 
+operation AssignmentStep toJava(): String {
+    return self.symbol.name + " = " + self.body.toJava();
+}
+
+operation PrintStep toJava(): String {
+    return "System.out.println(" + self.symbol.name + ")";
+}
+
 // TYPES
 
 @cached
@@ -67,8 +75,27 @@ operation PrimitiveType serialize(): String {
 }
 
 @cached
+operation PrimitiveType toJavaType(): String {
+	switch (self.primitive) {
+		case Primitive#TEXT:
+			return "String";
+		case Primitive#REAL:
+			return "double";
+		case Primitive#INTEGER:
+			return "int";
+		case Primitive#BOOLEAN:
+			return "boolean";
+	}
+}
+
+@cached
 operation VectorType serialize(): String {
 	return "Vector(" + self.valueType.serialize() + "," + self.length.asString() + ")";
+}
+
+@cached
+operation VectorType toJavaType(): String {
+    return self.valueType.serialize() + "[" + self.length.asString() + "]";
 }
 
 operation PrimitiveType isNumeric(): Boolean {
@@ -606,4 +633,91 @@ operation Calculator checkStepDependencies(): Boolean {
     }
 
     return ok;
+}
+
+operation TextLiteral toJava(): String {
+    return self.value;
+}
+
+operation IntegerLiteral toJava(): String {
+    return self.value.asString();
+}
+
+operation RealLiteral toJava(): String {
+    return self.value.asString();
+}
+
+operation BooleanLiteral toJava(): String {
+    return self.value.asString();
+}
+
+operation SymbolExpression toJava(): String {
+    return self.symbol.name;
+}
+
+@cached
+operation UnaryExpression toJava(): String {
+    var op = "";
+    switch (self.operator) {
+        case UnaryOp#LOGICAL_NOT:
+            op = "!";
+        case UnaryOp#NEGATION:
+            op = "-";
+    }
+    return op + " (" + self.body.toJava() + ")";
+}
+
+
+@cached
+operation BinaryExpression toJava(): String {
+    var left = self.exprs[0].toJava();
+    var right = self.exprs[1].toJava();
+    var op = "";
+
+    switch (self.operator) {
+        case BinaryOp#ADDITION:
+            op = "+";
+        case BinaryOp#MULTIPLICATION:
+            op = "*";
+        case BinaryOp#DIVISION:
+            return "(" + left + ") / (" + right + ")";
+        case BinaryOp#SUBTRACTION:
+            op = "-";
+        case BinaryOp#POWER:
+            op = "^"; // todo: power
+        case BinaryOp#MODULO:
+            op = "%";
+        case BinaryOp#GREATER_THAN:
+            op = ">";
+        case BinaryOp#GREATER_THAN_EQUAL_TO:
+            op = ">=";
+        case BinaryOp#LESS_THAN:
+            op = "<";
+        case BinaryOp#LESS_THAN_EQUAL_TO:
+            op = "<=";
+        case BinaryOp#LOGICAL_AND:
+            op = "&&";
+        case BinaryOp#LOGICAL_OR:
+            op = "||";
+        case BinaryOp#LOGICAL_IMPLIES:
+            op = "⇒"; // todo: implies
+        case BinaryOp#EQUIVALENT:
+            op = "==";
+        case BinaryOp#NOT_EQUIVALENT:
+            op = "!=";
+    }
+
+    return "(" + left + " " + op + " " + right + ")";
+}
+
+@cached
+operation TertiaryExpression toJava(): String {
+    var fst = self.exprs[0].toJava();
+    var snd = self.exprs[1].toJava();
+    var thd = self.exprs[2].toJava();
+
+    switch (self.operator) {
+        case (TertiaryOp#IF_THEN_ELSE):
+            return fst + " ? " + snd + " : " + thd;
+    }
 }
