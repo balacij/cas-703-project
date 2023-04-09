@@ -189,10 +189,10 @@ easier to modify compared to Ecore.
 
 \begin{lstlisting}[caption={Calculator EMF},label={lst:calculator}]
 class Calculator extends Described {
-  attr String[1] name;
-  val SymbolDeclaration[*] symbolDeclarations;
-  val CalculationStep[*] steps;
-  val TestCase[*] testCases;
+  attr String[1] name = "";
+	val SymbolDeclaration[*] symbolDeclarations;
+	val CalculationStep[*] steps;
+	val TestCase[*] testCases;
 }
 \end{lstlisting}
 
@@ -268,7 +268,7 @@ enum SymbolDeclarationKind {
 }
 
 class Symbol {
-  id attr String[1] name;
+  id attr String[1] name = "";
   val Type[1] type;
   ref SymbolDeclaration[1]#symbol declaration;
 }
@@ -279,6 +279,7 @@ abstract class CalculationStep extends Described {
 	op String[1] toHRN();
 	op Symbol[*] dependencies();
 	op Symbol[*] calculates();
+	op String[1] toJava();
 }
 
 class AssignmentStep extends CalculationStep {
@@ -287,14 +288,14 @@ class AssignmentStep extends CalculationStep {
 }
 
 class PrintStep extends CalculationStep {
-	attr String[1] preface;
+	attr String[1] preface = "";
 	ref Symbol[1] symbol;
 }
 \end{lstlisting}
 
 \begin{lstlisting}[caption={Test Case},label={lst:test-case}]
 class TestCase extends Described {
-	attr String[1] name;
+	attr String[1] name = "";
 	val AssignmentStep[+] assignments;
 	val Expression[+] assertions;
 }
@@ -311,6 +312,7 @@ enum Primitive {
 abstract class Type {
   op String[1] serialize();
   op boolean[1] isNumeric();
+	op String[1] toJavaType();
 }
 
 class PrimitiveType extends Type {
@@ -327,6 +329,7 @@ abstract class Expression {
 	op Type[1] type();
 	op String[1] toHRN();
 	op Symbol[*] symbolReferences();
+	op String[1] toJava();
 }
 
 class TextLiteral extends Expression {
@@ -395,7 +398,7 @@ enum TertiaryOp {
 
 class TertiaryExpression extends Expression {
   attr TertiaryOp[1] operator;
-  val Expression[2] exprs;
+  val Expression[3] exprs;
 }
 \end{lstlisting}
 
