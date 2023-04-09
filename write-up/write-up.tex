@@ -216,14 +216,31 @@ have used a subclass. The symbol content itself is contained in another class
 (\lstinline{Symbol}) with a one-to-one relationship with symbol declarations.
 \lstinline{Symbol}s contain a name attribute (assumed to be a Java-friendly
 identifier) and a declared \textit{type} of the symbol. The types are
-containment references of \lstinline{Type}s (\Cref{lst:type-universe}). 
+containment references of \lstinline{Type}s (\Cref{lst:type-universe}).  
 
-For our types, we restricted our type universe in our calculator to ``simple''
-first-order types with no parameters.
+We chose to build a basic unambiguous judgment-based~\cite{nlab:judgment} type
+system. We restricted our type universe in our calculator to ``simple''
+first-order types with no parameters. Thus, we have booleans, strings, integers,
+and real numbers. However, we do intend to implement vectors as well. We used a
+base \lstinline{Type} class to create a generic class of types, and then a
+subclass (\lstinline{PrimitiveType}) to designate primitive types using an
+enumeration of primitive types (\lstinline{Primitive}). By extending the basic
+\lstinline{Type} class with other types, we can further extend our DSLs type
+system.
+
+The next major component of our calculators are the calculation steps. As
+already mentioned in \Cref{sec:modelling:subsec:requirements}, we restricted
+ourselves to 2 kinds of steps: assignment steps, and print steps. Assignment
+steps (\lstinline{AssignmentStep}) and print steps (\lstinline{PrintStep}) are
+both subclasses of the abstract base class: \lstinline{CalculationStep}
+(\Cref{lst:calculation-steps}). Print steps contain a description (we called it
+a ``preface'') for the need to print a particular symbol (noted by reference).
+\lstinline{AssignmentStep}s contain a reference to a symbol, an optional
+description \lstinline{String} attribute, and a value reference to a defining
+expression. The expression is expected to be well-typed, but we only impose this
+restriction in \Cref{sec:model-validation}.
 
 \begin{enumerate}
-  \item types,
-  \item calculation steps,
   \item expressions, and
   \item test cases.
 \end{enumerate}
