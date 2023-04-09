@@ -49,6 +49,14 @@
 % Soure code
 \usepackage{listings}
 
+\Crefname{lstlisting}{Listing}{Listings}
+
+\lstdefinestyle{mystyle}{
+  basicstyle=\ttfamily\footnotesize,
+  tabsize=2
+}
+\lstset{style=mystyle}
+
 \title{\vspace{-3.5cm}CAS 703 Term Project: Validated General-Purpose Calculators}
 \author{Hassan Zaker \and Jason Balaci}
 
@@ -65,6 +73,8 @@
 \maketitle
 
 \tableofcontents
+
+\lstlistoflistings
 
 \newpage{}
 
@@ -170,12 +180,29 @@ we want to reasonably assure ourselves).
 Thus, together, we define our calculator as having 3 main aspects: (a) a set of
 symbols, (b) an algorithm that somehow calculates the output symbols from the
 inputs, and (c) a set of test cases to gain confidence that (b) is reliable. To
-model our calculator DSL, we chose to use Emfatic because we found it to be
-faster to work with. In particular, we found it to be more readable and easier
-to modify compared to Ecore.
+model our calculator DSL, we chose to use Emfatic (EMF) because we found it to
+be faster to work with. In particular, we found it to be more readable and
+easier to modify compared to Ecore.
 
 \subsection{Emfatic}
 \label{sec:modelling:subsec:emfatic}
+
+\begin{lstlisting}[caption={Calculator EMF},label={lst:calculator}]
+class Calculator extends Described {
+  attr String[1] name;
+  val SymbolDeclaration[*] symbolDeclarations;
+  val CalculationStep[*] steps;
+  val TestCase[*] testCases;
+}
+\end{lstlisting}
+
+When translating the calculators to Emfatic (\Cref{lst:calculator}), we also
+added the name and a description of the calculators using string
+attributes\footnote{Note that since we commonly use comments and descriptions,
+we added a ``Described'' base class to quickly attach description attributes
+(\Cref{lst:described}).}. The calculator class contains 3 other ``containment
+references'' (vals): symbol declarations, calculation steps (denoting the
+algorithm), and a set of test cases.
 
 \newpage{}
 
@@ -215,5 +242,158 @@ to modify compared to Ecore.
 % Bibliography
 %------------------------------------------------------------------------------
 \printbibliography[heading=bibintoc]
+
+\section*{Appendix}
+\label{sec:appendix}
+
+\begin{lstlisting}[caption={Abstract Class: Described},label={lst:described}]
+abstract class Described {
+  attr String[1] description = "";
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Symbol Declarations},label={lst:symbol-declarations}]
+class SymbolDeclaration extends Described {
+  attr SymbolDeclarationKind[1] kind;
+  val Symbol[1]#declaration symbol;
+}
+
+enum SymbolDeclarationKind {
+  INPUT;
+  INTERMEDIATE;
+  OUTPUT;
+}
+
+class Symbol {
+  id attr String[1] name;
+  val Type[1] type;
+  ref SymbolDeclaration[1]#symbol declaration;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Calculation Steps},label={lst:calculation-steps}]
+abstract class CalculationStep extends Described {
+	op String[1] toHRN();
+	op Symbol[*] dependencies();
+	op Symbol[*] calculates();
+}
+
+class AssignmentStep extends CalculationStep {
+	ref Symbol[1] symbol; // LHS
+	val Expression[1] body; // RHS
+}
+
+class PrintStep extends CalculationStep {
+	attr String[1] preface;
+	ref Symbol[1] symbol;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Test Case},label={lst:test-case}]
+class TestCase extends Described {
+	attr String[1] name;
+	val AssignmentStep[+] assignments;
+	val Expression[+] assertions;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Type Universe},label={lst:type-universe}]
+enum Primitive {
+	TEXT;
+	REAL;
+	INTEGER;
+	BOOLEAN;
+}
+
+abstract class Type {
+  op String[1] serialize();
+  op boolean[1] isNumeric();
+}
+
+class PrimitiveType extends Type {
+  attr Primitive[1] primitive;
+}
+
+class InvalidType extends Type {
+  attr String[1] cause;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Expression Language},label={lst:expression-language}]
+abstract class Expression {
+	op Type[1] type();
+	op String[1] toHRN();
+	op Symbol[*] symbolReferences();
+}
+
+class TextLiteral extends Expression {
+	attr String[1] value;
+}
+
+class RealLiteral extends Expression {
+	attr double[1] value;
+}
+
+class IntegerLiteral extends Expression {
+	attr int[1] value;
+}
+
+class BooleanLiteral extends Expression {
+	attr boolean[1] value;
+}
+
+class SymbolExpression extends Expression {
+    ref Symbol[1] symbol;
+}
+
+enum UnaryOp {
+	LOGICAL_NOT;
+	NEGATION;
+}
+
+class UnaryExpression extends Expression {
+	attr UnaryOp[1] operator;
+	val Expression[1] body;
+}
+
+enum BinaryOp {
+	// numbers (of same type)
+	ADDITION; // also allowed for text and vectors
+	MULTIPLICATION;
+	DIVISION;
+	SUBTRACTION;
+	POWER;
+	MODULO;
+
+	// inequalities
+	GREATER_THAN;
+	GREATER_THAN_EQUAL_TO;
+	LESS_THAN;
+	LESS_THAN_EQUAL_TO;
+	
+	// booleans
+	LOGICAL_AND;
+	LOGICAL_OR;
+	LOGICAL_IMPLIES;
+	
+	// any
+	EQUIVALENT;
+	NOT_EQUIVALENT;
+}
+
+class BinaryExpression extends Expression {
+  attr BinaryOp[1] operator;
+  val Expression[2] exprs;
+}
+
+enum TertiaryOp {
+  IF_THEN_ELSE;
+}
+
+class TertiaryExpression extends Expression {
+  attr TertiaryOp[1] operator;
+  val Expression[2] exprs;
+}
+\end{lstlisting}
 
 \end{document}
