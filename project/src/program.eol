@@ -47,7 +47,12 @@ operation AssignmentStep toHRN(): String {
 }
 
 operation PrintStep toHRN(): String {
-    return "debug: show " + self.symbol.name;
+    var comment = self.symbol.name;
+    if (self.preface.length() > 0) {
+        comment = self.preface;
+    }
+
+    return "debug: '" + comment + "': " + self.symbol.name;
 }
 
 operation AssignmentStep toJava(): String {
@@ -55,7 +60,14 @@ operation AssignmentStep toJava(): String {
 }
 
 operation PrintStep toJava(): String {
-    return "System.out.println(" + self.symbol.name + ")";
+    // todo: depending on the type of the symbol, we might need to do something else
+    var comment = self.symbol.name;
+
+    if (self.preface.length() > 0) {
+        comment = self.preface;
+    }
+
+    return 'System.out.println("' + comment + ' ~ " + ' + self.symbol.name + ')';
 }
 
 // TYPES
