@@ -107,7 +107,7 @@ class BooleanLiteral extends Expression {
 }
 
 class Symbol {
-    id attr String[1] name;
+    id attr String[1] name = "";
     val Type[1] type;
 	ref SymbolDeclaration[1]#symbol declaration;
 }
