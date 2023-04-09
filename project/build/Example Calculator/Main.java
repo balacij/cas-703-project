@@ -33,7 +33,7 @@ public class Calculator {
     System.out.println("Calculating...");
 
     y = (x + 1.23);
-    System.out.println(y);
+    System.out.println("y ~ " + y);
     z = (x * (x + 1.23));
     p = (z == z);
     z = p ? 1.23 : z;

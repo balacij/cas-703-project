@@ -10,7 +10,7 @@ abstract class Described {
 // CALCULATOR
 
 class Calculator extends Described {
-    attr String[1] name;
+    attr String[1] name = "";
 	val SymbolDeclaration[*] symbolDeclarations;
 	val CalculationStep[*] steps;
 	val TestCase[*] testCases;
@@ -44,13 +44,13 @@ class AssignmentStep extends CalculationStep {
 }
 
 class PrintStep extends CalculationStep {
-	attr String[1] preface;
+	attr String[1] preface = "";
 	ref Symbol[1] symbol;
 }
 
 // TEST CASES
 class TestCase extends Described {
-	attr String[1] name;
+	attr String[1] name = "";
 	val AssignmentStep[+] assignments;
 	val Expression[+] assertions;
 }
