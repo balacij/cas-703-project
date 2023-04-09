@@ -6,3 +6,8 @@ rule READMEs transform c : Calculator {
     template: "templates/readme.egl"
     target: artifactsDir + c.name + "/README.md"
 }
+
+rule JavaPrograms transform c : Calculator {
+    template: "templates/java.egl"
+    target: artifactsDir + c.name + "/Main.java"
+}

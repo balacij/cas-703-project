@@ -201,8 +201,8 @@ added the name and a description of the calculators using string
 attributes\footnote{Note that since we commonly use comments and descriptions,
 we added a ``Described'' base class to quickly attach description attributes
 (\Cref{lst:described}).}. The calculator class contains 3 other ``containment
-references'' (vals): symbol declarations, calculation steps (denoting the
-algorithm), and a set of test cases.
+references'' (\lstinline{val}s): symbol declarations, calculation steps
+(denoting the algorithm), and a set of test cases.
 
 \newpage{}
 
@@ -243,7 +243,10 @@ algorithm), and a set of test cases.
 %------------------------------------------------------------------------------
 \printbibliography[heading=bibintoc]
 
+\newpage{}
+
 \section*{Appendix}
+\addcontentsline{toc}{section}{Appendix}
 \label{sec:appendix}
 
 \begin{lstlisting}[caption={Abstract Class: Described},label={lst:described}]

@@ -24,6 +24,16 @@ context Calculator {
         message: "It would be nice if you defined a human-readable description of your calculator.".withCalculator(self)
     }
 
+    constraint SymbolsNamed {
+        check: self.symbols().forAll(s|s.name.length() >= 1)
+        message: "All symbols must have a non-empty name".withCalculator(self)
+    }
+
+    constraint SymbolsNamedAppropriately {
+        check: self.symbols().forAll(s|s.name.matches("^[a-zA-Z]([a-zA-Z0-9_]+)?$"))
+        message: "All symbols must start with a letter and be followed by a sequence of letters, numbers or underscores.".withCalculator(self)
+    }
+
     constraint UniqueSymbols {
         check: allUnique(self.symbols().name)
         message: "All symbols should have unique names.".withCalculator(self)
