@@ -204,6 +204,30 @@ we added a ``Described'' base class to quickly attach description attributes
 references'' (\lstinline{val}s): symbol declarations, calculation steps
 (denoting the algorithm), and a set of test cases.
 
+Symbol declarations (\lstinline{SymbolDeclaration},
+\Cref{lst:symbol-declarations}) define a symbol (\lstinline{Symbol}) with a
+textual description and the \textit{kind} of symbol it is \textemdash{} input
+(user-provided at the start of the calculator), intermediate (derived from the
+inputs but not important), or output symbols (symbols that users are interested
+in calculating). Since the difference between the symbol kinds is quite surface
+level (or so we claim), we chose to use an \lstinline{enum} attribute in our
+symbol declaration type. If there were any behavioural differences, we would
+have used a subclass. The symbol content itself is contained in another class
+(\lstinline{Symbol}) with a one-to-one relationship with symbol declarations.
+\lstinline{Symbol}s contain a name attribute (assumed to be a Java-friendly
+identifier) and a declared \textit{type} of the symbol. The types are
+containment references of \lstinline{Type}s (\Cref{lst:type-universe}). 
+
+For our types, we restricted our type universe in our calculator to ``simple''
+first-order types with no parameters.
+
+\begin{enumerate}
+  \item types,
+  \item calculation steps,
+  \item expressions, and
+  \item test cases.
+\end{enumerate}
+
 \newpage{}
 
 %------------------------------------------------------------------------------
