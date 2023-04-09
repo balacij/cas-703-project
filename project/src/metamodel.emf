@@ -162,5 +162,5 @@ enum TertiaryOp {
 
 class TertiaryExpression extends Expression {
 	attr TertiaryOp[1] operator;
-	val Expression[2] exprs;
+	val Expression[3] exprs;
 }
