@@ -181,15 +181,18 @@ operation isTextTy(t : Type): Boolean {
     return textTy.equiv(t);
 }
 
-operation isNumericTy(t : Type): Boolean {
+operation isRealTy(t : Type): Boolean {
     var realTy = primitiveType(Primitive#REAL);
+    return realTy.equiv(t);
+}
+
+operation isIntTy(t : Type): Boolean {
     var intTy = primitiveType(Primitive#INTEGER);
-    if (realTy.equiv(t)) {
-        return true;
-    } else if (intTy.equiv(t)) {
-        return true;
-    }
-    return false;
+    return intTy.equiv(t);
+}
+
+operation isNumericTy(t : Type): Boolean {
+    return isRealTy(t) or isIntTy(t);
 }
 
 operation invalidTy(cause : String): InvalidType {
@@ -261,13 +264,16 @@ operation BinaryExpression type(): Type {
                 return leftTy;
             }
             return invalidTy("both operands of an addition/catenation must be numerics/text");
+        case BinaryOp#POWER:
+            if (leftTy.equiv(rightTy) and isRealTy(leftTy)) {
+                return leftTy;
+            }
+            return invalidTy("both operands of power must be reals");
         case BinaryOp#MULTIPLICATION:
             continue;
         case BinaryOp#DIVISION:
             continue;
         case BinaryOp#SUBTRACTION:
-            continue;
-        case BinaryOp#POWER: // TODO FIXME: should power only apply to real numbers?
             continue;
         case BinaryOp#MODULO:
             continue;
@@ -281,10 +287,6 @@ operation BinaryExpression type(): Type {
             if (leftTy.equiv(rightTy) and isNumericTy(leftTy)) {
                 return leftTy;
             }
-            ("op: " + self.operator).println();
-            ("leftTy: " + leftTy.toHRN()).println();
-            ("rightTy: " + rightTy.toHRN()).println();
-            ("expr: " + self.toHRN()).println();
             return invalidTy("both operands of mul/sub/pow expected to be the same numeric type");
         case BinaryOp#LOGICAL_AND:
             continue;
@@ -515,11 +517,11 @@ operation BinaryExpression evaluate(scope : Map): Any {
 	    case BinaryOp#MULTIPLICATION:
             value = left * right;
 	    case BinaryOp#DIVISION:
-            value = left / right; // TODO: be careful here
+            value = left / right;
 	    case BinaryOp#SUBTRACTION:
             value = left - right;
 	    case BinaryOp#POWER:
-            value = left.pow(right); // TODO: be careful here
+            value = left.pow(right);
         case BinaryOp#MODULO:
             value = left.mod(right);
         case BinaryOp#GREATER_THAN:
@@ -696,7 +698,7 @@ operation BinaryExpression toJava(): String {
         case BinaryOp#SUBTRACTION:
             op = "-";
         case BinaryOp#POWER:
-            op = "^"; // todo: power
+            return "Math.pow(" + left + ", " + right + ")";
         case BinaryOp#MODULO:
             op = "%";
         case BinaryOp#GREATER_THAN:
@@ -712,7 +714,7 @@ operation BinaryExpression toJava(): String {
         case BinaryOp#LOGICAL_OR:
             op = "||";
         case BinaryOp#LOGICAL_IMPLIES:
-            op = "⇒"; // todo: implies
+            return "(!" + left + " || " + right + ")";
         case BinaryOp#EQUIVALENT:
             op = "==";
         case BinaryOp#NOT_EQUIVALENT:

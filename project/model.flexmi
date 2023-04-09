@@ -30,7 +30,7 @@
     <assignmentstep symbol="z">
         <binaryexpression operator="MULTIPLICATION">
             <symbolexpression symbol="x"></symbolexpression>
-            <binaryexpression operation="ADDITION">
+            <binaryexpression operation="POWER">
                 <symbolexpression symbol="x"></symbolexpression>
                 <realliteral value="1.23"></realliteral>
             </binaryexpression>

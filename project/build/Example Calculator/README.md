@@ -31,7 +31,7 @@ deriving the outputs from the inputs.
 
 1. y ≔ (x + 1.23)
 2. debug: 'y': y
-3. z ≔ (x × (x + 1.23))
+3. z ≔ (x × (x ^ 1.23))
 4. p ≔ (z = z)
 5. z ≔ (if p then 1.23 else z)
 
