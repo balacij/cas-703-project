@@ -121,6 +121,62 @@ the languages it contains, and Xtext~\cite{Xtext}.
 \section{Modelling}
 \label{sec:modelling}
 
+To define our metamodel for our desired Domain-Specific Language (DSL), we first
+need to iron out the \textit{requirements} of that language.
+
+\subsection{Requirements}
+\label{sec:modelling:subsec:requirements}
+
+When we (the authors) think of ``calculators,'' we think of 3 main components:
+(i) a set of input symbols, (ii) a set of output symbols, and (iii) a means of
+deriving the output symbols from the input symbols. (i) and (ii) are really just
+``symbols'' with designation of whether they are user-provided or calculated.
+(iii) is a (commonly secret) algorithm that translates (i) to (ii) and which may
+rely on intermediate symbols irrelevant to (i) and (ii). Thus, we think of a
+calculator as being a structure of (a) symbols of different kinds (inputs,
+intermediates, and outputs) and (b) an algorithm that calculates some symbols
+from an initial subset of provided symbols.
+
+Depending on your preferred school of thought, algorithms can be thought of
+differently. We choose to think of them as being similar to imperative-style
+programming languages, where there is a memory of symbols to values, and a
+sequence of steps/statements that are executed sequentially against the memory.
+
+The most important kind of ``step'' our algorithm must have is ``symbol
+assignment,'' where some symbol is assigned the value of some expression. The
+expression may contain other symbols, but it should be restricted to only using
+symbols that have been assigned values (either as input to the calculator or by
+an earlier step). Logging is another important kind of step that algorithms
+might need, they're typically used for providing user-feedback for debugging,
+general information, warnings, errors, etc. Logging, similar to assignment
+steps, are provided an expression, for which are evaluated, but the difference
+is that the logging step displays the value to the user-feedback mechanism of
+the calculator rather than assigning the value to a symbol. For now, we choose
+to think of calculators as only having these 2 kinds of steps.
+
+The steps rely on a single mathematical expression language that describes how
+values can be altered in a predictable way. We choose to restrict our expression
+language to the common first-order definite-valued mathematical language that
+most undergraduates in a first-year university mathematics class are familiar
+with.
+
+Similar to how we expect our expression language to provide predictable results,
+we also expect our calculators to be predictable and reliably produce accurate
+results. To gain confidence in accuracy and predictability, we can test our
+calculators against well-known outputs for well-known inputs. In other words, we
+can create test cases to gain confidence that our calculator is reliable (which
+we want to reasonably assure ourselves).
+
+Thus, together, we define our calculator as having 3 main aspects: (a) a set of
+symbols, (b) an algorithm that somehow calculates the output symbols from the
+inputs, and (c) a set of test cases to gain confidence that (b) is reliable. To
+model our calculator DSL, we chose to use Emfatic because we found it to be
+faster to work with. In particular, we found it to be more readable and easier
+to modify compared to Ecore.
+
+\subsection{Emfatic}
+\label{sec:modelling:subsec:emfatic}
+
 \newpage{}
 
 %------------------------------------------------------------------------------
