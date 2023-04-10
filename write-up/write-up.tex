@@ -352,8 +352,13 @@ for models of our metamodel.
         names/identifiers should be usable as Java identifiers.
 \end{enumerate}
 
-Finally, each expression should be well-typed, or else invalid states are
-possible, and we don't want calculators to ever get ``stuck.''
+Finally, we have our last constraint: each expression should be well-typed, or
+else invalid states are possible, and we don't want calculators to ever get
+``stuck.''
+
+Together, these make up our constraints. We build them using standard EVL
+tooling (\Cref{lst:constraints-and-critiques}) and run them using a Gradle
+script on our parsed model.
 
 \newpage{}
 
