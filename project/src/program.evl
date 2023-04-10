@@ -15,23 +15,13 @@ operation Collection hasDuplicates(): Boolean {
 
 context Calculator {
     constraint NameLength {
-        check: self.name.length() >= 1
+        check: self.name.length() > 0
         message: "Calculator must have a name."
     }
 
     critique Description {
-        check: self.description.length() >= 1
+        check: self.description.length() > 0
         message: "It would be nice if you defined a human-readable description of your calculator.".withCalculator(self)
-    }
-
-    constraint SymbolsNamed {
-        check: self.symbols().forAll(s|s.name.length() >= 1)
-        message: "All symbols must have a non-empty name".withCalculator(self)
-    }
-
-    constraint SymbolsNamedAppropriately {
-        check: self.symbols().forAll(s|s.name.matches("^[a-zA-Z]([a-zA-Z0-9_]+)?$"))
-        message: "All symbols must start with a letter and be followed by a sequence of letters, numbers or underscores.".withCalculator(self)
     }
 
     constraint UniqueSymbols {
@@ -122,5 +112,17 @@ context Expression {
     constraint WellTyped {
         check: self.isWellTyped()
         message: "Expression is ill-typed: " + self.type().serialize()
+    }
+}
+
+context Symbol {
+    constraint SymbolsNamed {
+        check: Symbol.forAll(s|s.name.length() > 0)
+        message: "All symbols must have a non-empty name"
+    }
+
+    constraint SymbolsNamedAppropriately {
+        check: Symbol.forAll(s|s.name.matches("^[a-zA-Z]([a-zA-Z0-9_]+)?$"))
+        message: "All symbols must start with a letter and be followed by a sequence of letters, numbers or underscores."
     }
 }

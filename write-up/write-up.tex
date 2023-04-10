@@ -53,7 +53,10 @@
 
 \lstdefinestyle{mystyle}{
   basicstyle=\ttfamily\footnotesize,
-  tabsize=2
+  tabsize=2,
+  columns=fullflexible,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
 }
 \lstset{style=mystyle}
 
@@ -218,15 +221,15 @@ have used a subclass. The symbol content itself is contained in another class
 identifier) and a declared \textit{type} of the symbol. The types are
 containment references of \lstinline{Type}s (\Cref{lst:type-universe}).  
 
-We chose to build a basic unambiguous judgment-based~\cite{nlab:judgment} type
-system. We restricted our type universe in our calculator to ``simple''
-first-order types with no parameters. Thus, we have booleans, strings, integers,
-and real numbers. However, we do intend to implement vectors as well. We used an
-abstract \lstinline{Type} class to create a generic class of types (with basic
-feature requirements), and then a subclass (\lstinline{PrimitiveType}) to
-designate primitive types using an enumeration of primitive types
-(\lstinline{Primitive}). By extending the basic \lstinline{Type} class with
-other types, we can further extend our DSLs type system.
+We chose to build a basic unambiguous, static,
+judgment-based~\cite{nlab:judgment} type system. We restricted our type universe
+in our calculator to ``simple'' first-order types with no parameters. Thus, we
+have booleans, strings, integers, and real numbers. However, we do intend to
+implement vectors as well. We used an abstract \lstinline{Type} class to create
+a generic class of types (with basic feature requirements), and then a subclass
+(\lstinline{PrimitiveType}) to designate primitive types using an enumeration of
+primitive types (\lstinline{Primitive}). By extending the basic \lstinline{Type}
+class with other types, we can further extend our DSLs type system.
 
 The next major component of our calculators are the calculation steps. As
 already mentioned in \Cref{sec:modelling:subsec:requirements}, we restricted
@@ -277,6 +280,80 @@ to our next project: building a concrete syntax for our DSL.
 %------------------------------------------------------------------------------
 \section{Model Validation}
 \label{sec:model-validation}
+
+Using the Epsilon Validation Language (EVL), we built a series of constraints to
+impose restrictions we weren't able to adequately impose through the metamodel
+(\Cref{lst:constraints-and-critiques}). In particular, we built a series of
+constraints (hard requirements) and critiques (soft requirements/preferences)
+for models of our metamodel.
+
+\noindent{}Calculator Constraints:
+\begin{enumerate}
+  \item \textit{named}: each calculator must have a name for users to
+        disambiguate between calculators and their other files,
+  \item \textit{unique symbols}: each calculator must have a set of symbols that
+        have unique names within that set so variable references can be
+        unambiguous,
+  \item \textit{at least 1 input}: each calculator should have at least 1 input
+        symbol or else there is no interactivity with the calculators generated,
+        so a normal calculator should be used instead,
+  \item \textit{at least 1 output}: each calculator should have at least 1
+        output symbol or else there would be no way to audit or use the
+        calculator,
+  \item \textit{all outputs assigned once}: all designated output symbols are
+        meaningful in some way and should be guaranteed to have a value at the
+        end of the calculation steps,
+  \item \textit{all intermediate symbols assigned once}: if a declared
+        intermediate symbol is never assigned, then it can be removed to
+        de-clutter the calculator,
+  \item \textit{all assignment steps well-typed}: each assignment should involve
+        a symbol of the same type as an expression,
+  \item \textit{all test case assignments are input symbols}: the
+        pre-calculation state of the calculators should only have input
+        variables assigned values,
+  \item \textit{all test case assignments contain no variable references}: all
+        assignment bodies in test cases should be evaluable to literal-valued
+        expressions (e.g., contain no symbol references) because there is no
+        defined variables before input set,
+  \item \textit{all test cases assign all input variables}: each test case
+        should mimic users fully, by providing all necessary inputs the
+        calculator would need,
+  \item \textit{all test case inputs unambiguous/``no duplicates''}: each
+        defined test case should have no ambiguous symbol assignments or else
+        the initial state of the test case simulations would be ambiguous,
+  \item \textit{all test case assertions are boolean-typed}: the assertions
+        should be propositional statements or else they should be part of the
+        calculation steps of the main calculator,
+  \item \textit{all steps depend on non-null symbols}: each step of the
+        calculation should only rely on symbols with defined values or else
+        invalid and undefined expressions and operations will occur, and
+  \item \textit{all test cases satisfied}: the calculation steps should be
+        simulated under each test case, and each test case should be satisfied.
+\end{enumerate}
+
+\noindent{}Calculator Critiques:
+\begin{enumerate}
+  \item \textit{description}: it would be nice to have a description of the
+        intent of the calculator and general information about how it works,
+  \item \textit{all inputs described}: it would be nice for each input symbol to
+        have a user-friendly description to describe what the variable means,
+  \item \textit{all outputs described}: same as above, and
+  \item \textit{all test case assertions meaningful}: each test case assertion
+        statement should reference symbols in that calculator or else the
+        assertion would be evaluable without simulation.
+\end{enumerate}
+
+\noindent{}Symbol constraints:
+\begin{enumerate}
+  \item \textit{named}: each symbol should have a name or else using them would
+        be impossible, and
+  \item \textit{named with only appropriate characters}: a restriction imposed
+        by desiring Java-compilation and non-unicode data entry \textemdash{}
+        names/identifiers should be usable as Java identifiers.
+\end{enumerate}
+
+Finally, each expression should be well-typed, or else invalid states are
+possible, and we don't want calculators to ever get ``stuck.''
 
 \newpage{}
 
@@ -383,7 +460,7 @@ class InvalidType extends Type {
 \end{lstlisting}
 
 \begin{lstlisting}[caption={Expression Language},label={lst:expression-language}]
-abstract class Expression {
+  abstract class Expression {
 	op Type[1] type();
 	op String[1] toHRN();
 	op Symbol[*] symbolReferences();
@@ -457,6 +534,135 @@ enum TertiaryOp {
 class TertiaryExpression extends Expression {
   attr TertiaryOp[1] operator;
   val Expression[3] exprs;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Constraints and Critiques},label={lst:constraints-and-critiques}]
+operation String withCalculator(c : Calculator): String {
+    return c.name + ": " + self;
+}
+
+operation allUnique(c : Collection): Boolean {
+    var asSet = c.asSet();
+    return c.size() == asSet.size();
+}
+
+operation Collection hasDuplicates(): Boolean {
+    return self.asSet().size() == self.size();
+}
+
+context Calculator {
+    constraint NameLength {
+        check: self.name.length() > 0
+        message: "Calculator must have a name."
+    }
+
+    critique Description {
+        check: self.description.length() > 0
+        message: "It would be nice if you defined a human-readable description of your calculator.".withCalculator(self)
+    }
+
+    constraint UniqueSymbols {
+        check: allUnique(self.symbols().name)
+        message: "All symbols should have unique names.".withCalculator(self)
+    }
+
+    constraint AtLeast1Input {
+        check: self.inputs().size() > 0
+        message: "Each calculator should have at least 1 input.".withCalculator(self)
+    }
+
+    constraint AtLeast1Output {
+        check: self.outputs().size() > 0
+        message: "Each calculator should have at least 1 output.".withCalculator(self)
+    }
+
+    critique AllInputsDescribed {
+        check: self.inputs().declaration.description.forAll(s|s.length() > 0)
+        message: "Each input symbol should have a description for usability.".withCalculator(self)
+    }
+
+    critique AllOutputsDescribed {
+        check: self.outputs().declaration.description.forAll(s|s.length() > 0)
+        message: "Each output symbol should have a description for usability.".withCalculator(self)
+    }
+
+    constraint AllOutputsAssignedOnce {
+        check: self.outputs().forAll(o|self.hasAssignmentStep(o))
+        message: "Each output symbol should be assigned at least once in your calculation steps.".withCalculator(self)
+    }
+
+    constraint AllIntermediatesAssignedOnce {
+        check: self.intermediates().forAll(o|self.hasAssignmentStep(o))
+        message: "Each intermediate symbol should be assigned at least once in your calculation steps.".withCalculator(self)
+    }
+
+    constraint AllAssignmentsWellTyped {
+        check: self.assignmentSteps().forAll(astep|astep.symbol.type.equiv(astep.body.type()))
+        message: "Each assignment step must be well-typed.".withCalculator(self)
+    }
+
+    constraint AllTestCaseInputSymbolsAreInputs {
+        check: self.testCases.forAll(testCase|testCase.assignments.forAll(asgn|asgn.symbol.declaration.kind==SymbolDeclarationKind#INPUT))
+        message: "Test case inputs should only assign values to input variables".withCalculator(self)
+    }
+
+    constraint AllTestCaseInputExpressionsLiteral {
+        check: self.testCases.forAll(testCase|testCase.assignments.forAll(asgn|asgn.body.symbolReferences().isEmpty()))
+        message: "Test case inputs should not reference any symbol in their assignments.".withCalculator(self)
+    }
+
+    constraint AllTestCaseAssignAllInputs {
+        // note: using '>=' here because (a) we already ensure that each symbol assigned is an input
+        //       and that there are no duplicate assignments.
+        check: self.testCases.forAll(testCase|testCase.assignments.symbol.size() >= self.inputs().size())
+        message: "Test case inputs should assign a value to each input.".withCalculator(self)
+    }
+
+    constraint AllTestCaseInputsUnambiguous {
+        check: self.testCases.forAll(testCase|testCase.assignments.symbol.hasDuplicates())
+        message: "Test case inputs may not have ambiguous assignments for input symbols.".withCalculator(self)
+    }
+
+    constraint AllTestCaseAssertionsAreBooleanTyped {
+        check: self.testCases.forAll(testCase|testCase.assertions.forAll(e|isBoolTy(e.type())))
+        message: "Test case assertions must all be propositions (boolean-typed expressions)".withCalculator(self)
+    }
+
+    critique AllTestCaseAssertionsMeaningful {
+        check: self.testCases.forAll(testCase|testCase.assertions.forAll(e|not e.symbolReferences().isEmpty()))
+        message: "Each test case assertion should have at least 1 symbol reference, or else the check if superfluous".withCalculator(self)
+    }
+
+    constraint AllStepsDepsHaveValues {
+        check: self.checkStepDependencies()
+        message: "Each step's symbol dependencies must be satisfied before that step.".withCalculator(self)
+    }
+
+    constraint AllTestCasesSatisfied {
+        guard: self.satisfiesAll("AllStepsDepsHaveValues", "AllTestCaseAssertionsAreBooleanTyped", "WellTyped", "AllIntermediatesAssignedOnce", "AllOutputsAssignedOnce")
+        check: self.testCases.forAll(testCase|testCase.isSatisfied(self.steps))
+        message: "Not all test cases are satisfied! Check algorithm!".withCalculator(self)
+    }
+}
+
+context Expression {
+    constraint WellTyped {
+        check: self.isWellTyped()
+        message: "Expression is ill-typed: " + self.type().serialize()
+    }
+}
+
+context Symbol {
+    constraint SymbolsNamed {
+        check: Symbol.forAll(s|s.name.length() > 0)
+        message: "All symbols must have a non-empty name"
+    }
+
+    constraint SymbolsNamedAppropriately {
+        check: Symbol.forAll(s|s.name.matches("^[a-zA-Z]([a-zA-Z0-9_]+)?\$"))
+        message: "All symbols must start with a letter and be followed by a sequence of letters, numbers or underscores."
+    }
 }
 \end{lstlisting}
 
