@@ -429,11 +429,82 @@ generate, we also generate a ``read me'' file in Markdown (i.e., a
 Generation Language (EGL) files alongside the EGL Co-Ordination Language (EGX)
 to orchestrate their usage.
 
+\subsection{Working with EGL}
+\label{sec:model-management-operations:subsec:working-with-egl}
+
+Working with EGL was quite enjoyable for us, we found little to no issues at all
+using it. We chose to treat the target artifacts as ``text'' (hence using EGL)
+rather than ``models'' (which would require encoding Markdown and Java models)
+due to time constraints on the course and complexity associated with building a
+full Java Abstract Syntax Tree (AST) in EMF. Thus, we performed model-to-text
+model transformations. We built some extra tools in EOL to simplify our EGL
+code, such as adding defaults for empty strings, expression conversion to
+human-readable syntax, grabbing only the input/intermediate/output symbols, and
+more. One difficulty faced is generating the human-readable expressions without
+excessive parentheses. Ultimately, this was a constraint by time rather than by
+knowledge or the Epsilon tools since we wanted to have a custom mathematic
+notation for the end users of the programs. In other words, the human-readable
+notation would be appear slightly different than the input calculator models.
+However, it would have the same meaning and behaviour (and a bijection would
+exist between them).
+
+We fed in calculator instances to each of the EGL files and used that calculator
+instance to grab all necessary information to generate each file (Java or
+Markdown, respectively). The majority of the code involved (a) accessing
+variables from the model, (b) pretty-printing the variables in-place as
+necessary, and (c) adding default information and explanatory text where
+applicable (such as when the model contains no intermediate symbols and we want
+the user to know).
+
 \subsection{Generating a Java Program}
 \label{sec:model-management-operations:subsec:generating-a-java-program}
 
+To generate our Java CLI programs, we built an EGL file
+(\Cref{lst:java-generation-egl}) and hooked it up to our EGX
+(\Cref{lst:egl-co-ordination}) to make sure we have a special folder to carry
+our Java programs, one for each defined calculator. First, we manually built a
+prototype calculator of what we wanted to build, and then we gutted out the
+internal components that are accustomed to the model\footnote{In other words, we
+abstracted over the data that was obtained from the model} and regenerated them
+using the input models. We used the Java standard library for scanning the
+console for inputs from the user (via \lstinline{Scanner} usage on
+\lstinline{System.in}), printing (via \lstinline{System.out.println}), and
+certain non-standard calculations (via \lstinline{java.lang.Math}, such as
+\lstinline{Math.pow} for powers). We setup the code to create a basic
+introductory message and then immediately prompt users for the inputs (in the
+order they are defined in the model). Afterwards, the code will define the
+intermediate and output symbols, and run through the calculation steps
+sequentially\footnote{In the future, we may be able to look to parallelization
+and concurrency for large calculators.}. Finally, we print the value of each
+defined output symbol at the end of the program, and it terminates. The program
+is a single-file source program, so usage only requires a single
+\lstinline{java Main.java} execution in your preferred shell. Hopefully in the
+future we will be able to make this usage and interaction with the CLI programs
+more user-friendly.
+
 \subsection{Generating a README File}
 \label{sec:model-management-operations:subsec:generating-a-readme-file}
+
+Similar to our Java program generator, we also built an EGL file
+(\Cref{lst:readme-generation-egl}) and hooked it up to our EGX
+(\Cref{lst:egl-co-ordination}) to make sure we have a special folder to carry
+our Java program along with the README files, specialized to each defined
+calculator in the model. Again, we built a prototype README file and abstracted
+over the details specialized to models. For example, we creates variables for
+the names, descriptions, input, intermediate, and output symbol tables,
+calculation steps, and test case descriptions. Afterwards, we regenerated the
+\lstinline{README.md} files using our EGL code. We made sure to include
+documentation for the usage of the Java programs\footnote{With a target audience
+of users comfortable with the command-line, such as Junior Programmers and Data
+Analysts.}, a description of all the relevant variables to the program, a
+description of the calculation steps the program takes, and the list of test
+cases that were used to assert that the calculator models are reasonably
+well-behaved.
+
+Additionally, in both the Java program and the README files, we added some basic
+accreditation information, noting that the software was built for educational
+purposes under Dr.~Richard Paige's offering of CAS 703 at McMaster
+University~\cite{Paige7032023}.
 
 \newpage{}
 
