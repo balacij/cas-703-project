@@ -392,9 +392,13 @@ guaranteed\footnote{``Division by 0,'' and other issues that would require a
 dependent type system to mitigate are not considered here.} to have been
 assigned a value already. In order to validate, we had to iterate over the
 calculation steps sequentially, processing what impact they would have on
-symbols and what symbols they rely on to decide whether they are okay or not.
-The initial set of valid usable symbols are only the input symbols, and it is
-expected that by the end, each output symbol is calculated.
+symbols and what symbols they rely on to decide whether they are okay or not
+(\Cref{lst:check-step-dependencies}). The initial set of valid usable symbols
+are only the input symbols, and it is expected that by the end, each output
+symbol is calculated. The remainder of the validation rules rely on asserting
+propositions over all instances of data types, mostly with respect to a
+particular calculator, using the standard primitive tooling available in EOL and
+EVL. Finally, with the validated models, we may build our desired artifacts.
 
 \newpage{}
 
@@ -847,6 +851,23 @@ operation TestCase isSatisfied(progSteps : Collection): Boolean {
     }
 
     return allAssertionsSatisfied;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Checking Calculation Step Dependencies},label={lst:check-step-dependencies}]
+operation Calculator checkStepDependencies(): Boolean {
+    var ok = true;
+    var assigned = self.inputs().clone();
+
+    for (step in self.steps) {
+        if (not assigned.includesAll(step.dependencies())) {
+            ok = false;
+            break;
+        }
+        assigned.addAll(step.calculates());
+    }
+
+    return ok;
 }
 \end{lstlisting}
 
