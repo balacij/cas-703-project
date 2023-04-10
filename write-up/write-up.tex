@@ -358,7 +358,12 @@ else invalid states are possible, and we don't want calculators to ever get
 
 Together, these make up our constraints. We build them using standard EVL
 tooling (\Cref{lst:constraints-and-critiques}) and run them using a Gradle
-script on our parsed model.
+script on our parsed model. If all constraints and critiques are satisfied for a
+model, then we claim that the produced artifacts (see
+\Cref{sec:model-management-operations}) and the model are relatively
+high-quality. Furthermore, we claim that the produced code artifact should be
+well-typed, and thus never run into invalid states, errors, or any issue at
+runtime (excluding that related to business logic).
 
 \newpage{}
 
