@@ -514,6 +514,51 @@ University~\cite{Paige7032023}.
 \section{Reflection and Concluding Thoughts}
 \label{sec:reflection-and-concluding-thoughts}
 
+Ultimately, we greatly enjoyed working on this term project. Working with
+Eclipse and Epsilon tooling was very enjoyable. The documentation for all
+Epsilon tools was stellar, and the Epsilon Playground allowed us to play around
+with the micro-models in isolated situations. 
+
+We only found light, noticeable issues with \lstinline{enum} support across
+tools, and with Xtext usage. Specifically, \lstinline{enum}s are not usable as
+parameter types in operations in EOL, but are in EMF. The flexibility allowed by
+the Epsilon tools was great, but the consistency here was problematic.
+Similarly, in Xtext, enumeration values could not be defaulted for
+constructions, which lead us to making an unfortunate decision to annotate our
+symbol declarations with excessive ``input,'' ``intermediate,'' and ``output''
+keywords (one per) for each declared symbol. Originally, we only wanted to have
+a grouping of them where each block of symbols was contained in one of those
+keyword blocks and assigned the related \lstinline{enum} value for the
+declaration kind. Additionally, with Xtext, we found difficulty in debugging
+issues related to our grammar and ended up needing to implement S-expressions
+for our mathematical expression language so ease the issues and assure that we
+could deliver for the deadline. We are confident that with more time, we would
+be able to the appropriate mathematical expression language for the concrete
+syntax, but for now, we are left with this.
+
+On the side of Epsilon tooling, we found great enjoyment working with Gradle and
+Ant to orchestrate the compiler. Originally, we developed an input model using
+Flexmi and used that to drive development against calculators, and then we
+worked towards adding Xtext to build a concrete syntax for our language. We
+still preferred to keep the textual concrete syntax because a graphical language
+we thought that defining expressions would be too time intensive for users.
+
+In the future, we hope to (at least):
+
+\begin{enumerate}
+  \item further integrate our Gradle build script components with our
+        Xtext-based editor,
+  \item add extra support for vectors and more operations in our metamodel and
+        concrete syntax, and
+  \item generate more kinds of software artifacts (such as GUI-oriented
+        programs, a single program that can connect multiple calculators, and
+        interactive web-based Single Page Applications [SPAs]).
+\end{enumerate}
+
+Model-driven engineering, the underlying theory, and practical applications
+thereof it, have been wonderful to learn about, and we hope to use these tools
+and ideas in the future.
+
 \newpage{}
 
 %------------------------------------------------------------------------------
