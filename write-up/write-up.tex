@@ -380,6 +380,21 @@ expressions, our evaluation methods were given an (implicitly) read-only
 ``scope'' Map for them to reference symbols. Similarly, for our simulation, we
 also had to pass along the current variable state of the simulation memory.
 However, the calculation steps are allowed to read from and modify the scope.
+The full code for simulation works by populating an initial memory state with
+the input variables, executing the calculation steps on the memory, and then
+checking that all the provided assertion propositions hold true
+(\Cref{lst:simulation-specific-code}, specifically the \lstinline{isSatisfied}
+operation).
+
+Another notable constraint is the dependency-checking of each calculation step
+\textemdash{} that is, each step should only rely on symbols that are reasonably
+guaranteed\footnote{``Division by 0,'' and other issues that would require a
+dependent type system to mitigate are not considered here.} to have been
+assigned a value already. In order to validate, we had to iterate over the
+calculation steps sequentially, processing what impact they would have on
+symbols and what symbols they rely on to decide whether they are okay or not.
+The initial set of valid usable symbols are only the input symbols, and it is
+expected that by the end, each output symbol is calculated.
 
 \newpage{}
 
@@ -689,6 +704,149 @@ context Symbol {
         check: Symbol.forAll(s|s.name.matches("^[a-zA-Z]([a-zA-Z0-9_]+)?\$"))
         message: "All symbols must start with a letter and be followed by a sequence of letters, numbers or underscores."
     }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Simulation-specific Code},label={lst:simulation-specific-code}]
+operation TextLiteral evaluate(scope : Map): Any {
+    return self.value;
+}
+
+operation RealLiteral evaluate(scope : Map): Any {
+    return self.value;
+}
+
+operation IntegerLiteral evaluate(scope : Map): Any {
+    return self.value;
+}
+
+operation BooleanLiteral evaluate(scope : Map): Any {
+    return self.value;
+}
+
+operation SymbolExpression evaluate(scope : Map): Any {
+    return scope.get(self.symbol.name);
+}
+
+operation UnaryExpression evaluate(scope : Map): Any {
+    var value = self.body.evaluate(scope);
+
+    switch (self.operator) {
+        case UnaryOp#LOGICAL_NOT:
+            value = not value;
+        case UnaryOp#NEGATION:
+            value = - value;
+    }
+
+    return value;
+}
+
+operation BinaryExpression evaluate(scope : Map): Any {
+    var left = self.exprs[0].evaluate(scope);
+    var right = self.exprs[1].evaluate(scope);
+    var value = null;
+
+    switch (self.operator) {
+	    case BinaryOp#ADDITION:
+            value = left + right;
+	    case BinaryOp#MULTIPLICATION:
+            value = left * right;
+	    case BinaryOp#DIVISION:
+            value = left / right;
+	    case BinaryOp#SUBTRACTION:
+            value = left - right;
+	    case BinaryOp#POWER:
+            value = left.pow(right);
+        case BinaryOp#MODULO:
+            value = left.mod(right);
+        case BinaryOp#GREATER_THAN:
+            value = left > right;
+        case BinaryOp#GREATER_THAN_EQUAL_TO:
+            value = left >= right;
+        case BinaryOp#LESS_THAN:
+            value = left < right;
+        case BinaryOp#LESS_THAN_EQUAL_TO:
+            value = left <= right;
+	    case BinaryOp#LOGICAL_AND:
+            value = left and right;
+	    case BinaryOp#LOGICAL_OR:
+            value = left or right;
+	    case BinaryOp#LOGICAL_IMPLIES:
+            value = (not left) or right;
+	    case BinaryOp#EQUIVALENT:
+            value = left == right;
+        case BinaryOp#NOT_EQUIVALENT:
+            value = left != right;
+    }
+
+    return value;
+}
+
+operation TertiaryExpression evaluate(scope : Map): Any {
+    var fst = self.exprs[0].evaluate(scope);
+    var value = null;
+
+    switch (self.operator) {
+        case TertiaryOp#IF_THEN_ELSE:
+            if (fst) {
+                value = self.exprs[1].evaluate(scope);
+            } else {
+                value = self.exprs[2].evaluate(scope);
+            }
+    }
+
+    return value;
+}
+
+operation AssignmentStep simulate(scope : Map): Map {
+    scope.put(self.symbol.name, self.body.evaluate(scope));
+    return scope;
+}
+
+operation PrintStep simulate(scope : Map): Map {
+    var stub = self.symbol.name + " = " + scope.get(self.symbol.name).asString();
+    if (self.preface?.length() > 0) {
+        stub = stub + " ~ " + self.preface;
+    }
+    stub.println();
+    return scope;
+}
+
+operation TestCase isSatisfied(progSteps : Collection): Boolean {
+    // Create scope map
+    var emptyScope = Map{};
+    var scope = Map{};
+    for (asgn in self.assignments) {
+        scope.put(asgn.symbol.name, asgn.body.evaluate(emptyScope)); // note: each input should have an empty scope!
+    }
+    ("Testing assertion: " + self.name + ", with input set: " + scope.asString()).println();   
+    
+    // Simulate algorithm steps
+    for (step in progSteps) {
+        ("Simulating step: " + step.toHRN()).println();
+        scope = step.simulate(scope);
+    }
+
+    // Evaluate assertions on the scope and ensure that they are all satisfied
+    var allAssertionsSatisfied = true;
+    for (assertable in self.assertions) {
+        ("Checking assertion: " + assertable.toHRN() + "... ").print();
+        if (assertable.evaluate(scope)) {
+            "Ok!".println();
+        } else {
+            "Failed!".println();
+            allAssertionsSatisfied = false;
+            break;
+        }
+    }
+
+    if (allAssertionsSatisfied) {
+        ("Test case " + self.name + " SUCCEEDED!").println();
+    } else {
+        ("Test case " + self.name + " FAILED!").println();
+    }
+
+    return allAssertionsSatisfied;
 }
 \end{lstlisting}
 
