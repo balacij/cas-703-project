@@ -365,6 +365,22 @@ high-quality. Furthermore, we claim that the produced code artifact should be
 well-typed, and thus never run into invalid states, errors, or any issue at
 runtime (excluding that related to business logic).
 
+The simulation of the test cases is one of our larger validation schemes. We had
+to emulate the Java code that would be run under the test cases provided.
+Unfortunately, we were not able to add an ``evaluation'' method to the base
+\lstinline{Expression} class because we needed the return type of the function
+to be \lstinline{Any}. We wanted to use \lstinline{Any} because we wanted to use
+the dynamic typing nature of EOL to avoid model duplication for literal values.
+However, the EMF language does not support \lstinline{Any}, and thus we had to
+``attach'' this functionality post-facto in our shared ``program.eol'' file used
+by all of our other files. For simulating the calculation steps, we faced
+similar issues with our base \lstinline{TestCase} type. We had to have an
+implicitly known base property of test cases that they are simulatable. For
+expressions, our evaluation methods were given an (implicitly) read-only
+``scope'' Map for them to reference symbols. Similarly, for our simulation, we
+also had to pass along the current variable state of the simulation memory.
+However, the calculation steps are allowed to read from and modify the scope.
+
 \newpage{}
 
 %------------------------------------------------------------------------------
