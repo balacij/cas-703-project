@@ -221,12 +221,12 @@ containment references of \lstinline{Type}s (\Cref{lst:type-universe}).
 We chose to build a basic unambiguous judgment-based~\cite{nlab:judgment} type
 system. We restricted our type universe in our calculator to ``simple''
 first-order types with no parameters. Thus, we have booleans, strings, integers,
-and real numbers. However, we do intend to implement vectors as well. We used a
-base \lstinline{Type} class to create a generic class of types, and then a
-subclass (\lstinline{PrimitiveType}) to designate primitive types using an
-enumeration of primitive types (\lstinline{Primitive}). By extending the basic
-\lstinline{Type} class with other types, we can further extend our DSLs type
-system.
+and real numbers. However, we do intend to implement vectors as well. We used an
+abstract \lstinline{Type} class to create a generic class of types (with basic
+feature requirements), and then a subclass (\lstinline{PrimitiveType}) to
+designate primitive types using an enumeration of primitive types
+(\lstinline{Primitive}). By extending the basic \lstinline{Type} class with
+other types, we can further extend our DSLs type system.
 
 The next major component of our calculators are the calculation steps. As
 already mentioned in \Cref{sec:modelling:subsec:requirements}, we restricted
@@ -240,10 +240,27 @@ description \lstinline{String} attribute, and a value reference to a defining
 expression. The expression is expected to be well-typed, but we only impose this
 restriction in \Cref{sec:model-validation}.
 
-\begin{enumerate}
-  \item expressions, and
-  \item test cases.
-\end{enumerate}
+Expressions have a shared base class: \lstinline{Expression}
+(\Cref{lst:expression-language}). There are various kinds of expressions we've
+implemented, such as literals (\lstinline{TextLiteral},
+\lstinline{BooleanLiteral}, \lstinline{IntegerLiteral},
+\lstinline{RealLiteral}), symbol references (\lstinline{SymbolExpression}),
+unary expressions (\lstinline{UnaryExpression}), binary expressions
+(\lstinline{BinaryExpression}), and tertiary expressions
+(\lstinline{TertiaryExpression}). The \lstinline{Expression} abstract base class
+defines a basic functionality set that each subclass of expression must provide
+\textemdash{} namely printing, type inference, symbols it depends on, and a Java
+representation method.
+
+The last component of our calculators are test cases. We expect that instances
+of these calculators to obey a set of test cases. Our \lstinline{TestCase} class
+is defined with a name and description String attributes, a list of assignment
+steps (that are expected to reference no symbols in their expressions), and a
+list of boolean-typed expressions\footnote{Both restrictions are only imposed in
+\Cref{sec:model-validation}.}.
+
+Finally, these 3 important classes define our calculators, and we may continue
+to our next project: building a concrete syntax for our DSL.
 
 \newpage{}
 
