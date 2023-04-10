@@ -391,10 +391,10 @@ operation).
 Another notable constraint is the dependency-checking of each calculation step
 \textemdash{} that is, each step should only rely on symbols that are reasonably
 guaranteed\footnote{``Division by 0,'' and other issues that would require a
-dependent type system to mitigate are not considered here.} to have been
-assigned a value already. In order to validate, we had to iterate over the
-calculation steps sequentially, processing what impact they would have on
-symbols and what symbols they rely on to decide whether they are okay or not
+dependent type system to mitigate are not considered.} to have been assigned a
+value already. In order to validate, we had to iterate over the calculation
+steps sequentially, processing what impact they would have on symbols and what
+symbols they rely on to decide whether they are okay or not
 (\Cref{lst:check-step-dependencies}). The initial set of valid usable symbols
 are only the input symbols, and it is expected that by the end, each output
 symbol is calculated. The remainder of the validation rules rely on asserting
@@ -465,7 +465,7 @@ To generate our Java CLI programs, we built an EGL file
 our Java programs, one for each defined calculator. First, we manually built a
 prototype calculator of what we wanted to build, and then we gutted out the
 internal components that are accustomed to the model\footnote{In other words, we
-abstracted over the data that was obtained from the model} and regenerated them
+abstracted over the data that was obtained from the model.} and regenerated them
 using the input models. We used the Java standard library for scanning the
 console for inputs from the user (via \lstinline{Scanner} usage on
 \lstinline{System.in}), printing (via \lstinline{System.out.println}), and
