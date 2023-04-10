@@ -4,6 +4,21 @@
 *[%=c.description%]*
 [%}%]
 
+## Software Guide
+
+### Software Prerequisites
+
+You should make sure to have a working installation of a Java compiler on your
+system. This guide will assume you are using one of the standard Java tooling,
+such as OpenJDK.
+
+### Running the Calculator
+
+The calculator is the standalone 'Main.java' file that is provided. To run it,
+you should only need to run 'java Main.java' in your shell. If you prefer to
+compile it into a Jar or a class file first, you should follow the instructions
+provided by your installed Java development toolkit.
+
 ## Symbols
 
 The [Inputs](#inputs) and [Outputs](#outputs) tables show variables relevant to

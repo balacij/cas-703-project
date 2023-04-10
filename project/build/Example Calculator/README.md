@@ -1,6 +1,21 @@
 # Example Calculator
 *Calculating things, an example :)*
 
+## Software Guide
+
+### Software Prerequisites
+
+You should make sure to have a working installation of a Java compiler on your
+system. This guide will assume you are using one of the standard Java tooling,
+such as OpenJDK.
+
+### Running the Calculator
+
+The calculator is the standalone 'Main.java' file that is provided. To run it,
+you should only need to run 'java Main.java' in your shell. If you prefer to
+compile it into a Jar or a class file first, you should follow the instructions
+provided by your installed Java development toolkit.
+
 ## Symbols
 
 The [Inputs](#inputs) and [Outputs](#outputs) tables show variables relevant to
@@ -30,7 +45,7 @@ deriving the outputs from the inputs.
 ## Calculation Steps
 
 1. y ≔ (x + 1.23)
-2. debug: 'y': y
+2. debug: show: y
 3. z ≔ (x × (x ^ 1.23))
 4. p ≔ (z = z)
 5. z ≔ (if p then 1.23 else z)
