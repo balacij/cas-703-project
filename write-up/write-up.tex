@@ -274,7 +274,48 @@ to our next project: building a concrete syntax for our DSL.
 %------------------------------------------------------------------------------
 \section{Integrated Development Environment}
 \label{sec:integrated-development-environment}
+In this section, we decided to use Xtext to build our IDE. At first, we developed an idea 
+using xtext that worked fine, but it was not connected to our metamodel. 
+Then we found out that's not the proper way so we decided to create a new xtext project from metamodel.genmodel file. Here, we are going to justify our design and 
+ implementation decisions, however the entire concrete syntax is attached to appendix.
+ 
+   \begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{ide1.png}
+    \caption{A simple example of our calculator in our IDE}
+    \label{fig:ide1}
+\end{figure}
 
+ \noindent{}Design Decisions:
+\begin{enumerate}
+  \item Connecting xtext to our metamodel forced us to do some modifications in our already defined syntax. One of this 
+  changes for the symbol kind. In the symbol declaration section, each symbol should be associated to one of three kinds(INPUT, INTERMEDIATE, OUTPUT).
+  Our first choice was to have three subsections for each kind, and every symbol should be defined in the corresponding subsection. After connecting xtext to metamodel, we were not able to do that because we had to set a default value for \lstinline{SymbolDeclarationKind} attribute in \lstinline{SymbolDeclaration} class. Now, all symbols are defined in one section and their kind should be specified for them. Like lines 2-9 in figure \ref{fig:ide1}.
+  
+  \item
+  One other modification we had to make for the same problem with enums was for expressions. In the first xtext project(the one that was not connected to metamodel) we implemented expressions very well. Precedence of every expression was considered. We tried to do the same thing here (xtext connected to metamodel) but it was not possible since we were not able to assign a default value to the operation attribute(which is an enum). Therefore, we decided to change the syntax for expressions to s-expressions.
+
+  
+  \end{enumerate}
+  
+  
+Beside the rules that are defined in the grammar, we defined three rules as validation to our idea. Checking this rules is not possible without adding validation rules to xtext. If the user don't follow these rule, he/she will see a corresponding error(figure \ref{fig:ide2}). Here we see some of these rules.
+
+   \begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{ide2.png}
+    \caption{Validation error in our IDE}
+    \label{fig:ide2}
+\end{figure}
+
+ \noindent{}Validation Rules:
+\begin{enumerate}
+  \item Every symbol must have a unique name.
+  \item Every symbol with output or intermediate kind must be assigned at least once in the steps section. 
+  \item Output and intermediate symbols should not be assigned in test case section.
+  \item Every input symbol must be assigned a value in test case section.
+  \item Using any symbol's name in steps or test case section that is not already defined is not allowed.
+  \end{enumerate}
 \newpage{}
 
 %------------------------------------------------------------------------------
